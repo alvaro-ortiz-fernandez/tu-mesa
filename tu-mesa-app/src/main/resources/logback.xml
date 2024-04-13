@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<property name="homefolder" value="${sede.home:-${user.home}/.sede}" />
+	<property name="homelogfolder" value="${homefolder}/logs" />
+	<property name="weblogfolder" value="${catalina.home:-${jetty.home:-${homefolder}}}/logs" />
+	
+	<include optional="true" file="${homefolder}/conf/logback-included.xml"/>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!--<file>${weblogfolder}/sede.log</file>-->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element 
+				or else the rollover logs are placed in the working directory. -->
+			<fileNamePattern>${weblogfolder}/sede.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!--<file>${weblogfolder}/auditoria_firma.log</file>-->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element 
+				or else the rollover logs are placed in the working directory. -->
+			<fileNamePattern>${weblogfolder}/auditoria_firma.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="CXF" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover. Make sure the path matches the one in the file element
+				or else the rollover logs are placed in the working directory. -->
+			<fileNamePattern>${weblogfolder}/cxf-%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.springframework" level="warn" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="org.springframework.security" level="warn" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="org.webjars" level="warn" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="com.pixelware" level="info" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<logger name="com.pixelware.eadmon.auditoria" level="info" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="AUDIT" />
+	</logger>
+	
+	<logger name="com.zaxxer.hikari" level="info" />
+	
+	<!-- 
+		Usar en pruebas de rendimiento y desarrollo
+		
+		<logger name="com.pixelware.eadmon.file.EntityLoader" level="debug" additivity="false">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE" />
+		</logger>
+	 -->
+
+	<logger name="org.apache.cxf" level="debug" additivity="false">
+		<!-- <appender-ref ref="STDOUT" /> -->
+		<appender-ref ref="CXF" />
+	</logger>
+
+	<!-- Este logger muestra la query que se va a ejecutar, es necesario ponerla a nivel trace -->
+	<!-- <logger name="com.pixelware.file.sql" level="trace" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger> -->
+
+	<root level="error">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

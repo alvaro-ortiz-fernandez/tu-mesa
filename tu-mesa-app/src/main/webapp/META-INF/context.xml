@@ -1,0 +1,8 @@
+<Context>	 
+	<!-- Este componente es necesario para que funcione el login por certificado
+		Esta clase está en la librería webserver-comps 1.1+ y se debe añadir en el classpath de Tomcat, 
+		no en el de la aplicación (copiar la librería en <TOMCAT_HOME>/lib)
+	 -->
+  	<Valve className="com.pixelware.webserver.tomcat.AppDelegatingSSLAuthenticator" requireCert="true" />
+  	
+</Context>
