@@ -8,7 +8,7 @@ buildscript {
 apply plugin: 'war'
 
 dependencies {
-    implementation project(':repository-lib')
+    implementation project(':tumesa-repository')
 
     // Framework web
     implementation 'org.springframework:spring-webmvc:' + springVersion

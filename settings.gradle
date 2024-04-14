@@ -1,5 +1,5 @@
 
 rootProject.name = 'tu-mesa'
 
-include ':repository-lib'
-include ':tu-mesa-app'
+include ':tumesa-repository'
+include ':tumesa-app'
