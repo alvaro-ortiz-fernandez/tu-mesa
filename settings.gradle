@@ -1,0 +1,5 @@
+
+rootProject.name = 'tu-mesa'
+
+include ':repository-lib'
+include ':tu-mesa-app'

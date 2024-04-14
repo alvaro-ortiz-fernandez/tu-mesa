@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'war'
+
+dependencies {
+    implementation project(':repository-lib')
+
+    // Framework web
+    implementation 'org.springframework:spring-webmvc:' + springVersion
+    implementation 'org.springframework.security:spring-security-core:' + springVersion
+    implementation 'org.springframework.security:spring-security-config:' + springVersion
+    implementation 'org.springframework.security:spring-security-web:' + springVersion
+
+    // Servlet
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    // Logging
+    implementation 'ch.qos.logback:logback-classic:1.5.5'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}

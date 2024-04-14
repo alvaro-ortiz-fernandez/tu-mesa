@@ -1,0 +1,60 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+def javaVersion = 1.21
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	jcenter()
+}
+
+subprojects {
+	apply plugin: 'idea'
+	apply plugin: 'java'
+	apply plugin: 'maven-publish'
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+
+	sourceCompatibility = javaVersion
+	targetCompatibility = javaVersion
+
+	ext {
+		javaVersion = javaVersion
+		springVersion = "6.1.6"
+		slf4jVersion = '2.0.13'
+	}
+
+	dependencies {
+		// Funcionalidades útiles
+		implementation 'com.google.guava:guava:33.1.0-jre'
+
+		// Logging
+		implementation 'org.slf4j:slf4j-api:' + slf4jVersion
+
+		// Test unitarios
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+	}
+
+	tasks.withType(JavaCompile) {
+		options.encoding = 'UTF-8'
+	}
+
+	compileJava.options.encoding = 'UTF-8'
+	group 'com.uoc.tumesa'
+}
