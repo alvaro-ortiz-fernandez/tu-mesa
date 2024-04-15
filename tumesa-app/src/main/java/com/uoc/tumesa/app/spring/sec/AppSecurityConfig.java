@@ -1,12 +1,11 @@
 package com.uoc.tumesa.app.spring.sec;
 
+import com.uoc.tumesa.app.spring.sec.user.UsuarioDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -14,46 +13,36 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class AppSecurityConfig {
 
 	@Bean
-	public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-		return new UsuarioDetailsService();
-	}
-
-	@Bean
-	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder,
+	public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder,
 			UserDetailsService userDetailService) throws Exception {
 
 		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 		authenticationManagerBuilder
 				.userDetailsService(userDetailService)
-				.passwordEncoder(bCryptPasswordEncoder);
+				.passwordEncoder(passwordEncoder);
 
 		return authenticationManagerBuilder.build();
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(AbstractHttpConfigurer::disable)
+		return http
+				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(registry -> registry
-					.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-					.requestMatchers("/admin/**").hasAnyRole("ADMIN")
-					.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-					.requestMatchers("/login/**").permitAll()
 					.anyRequest()
-					.authenticated()
+					.permitAll()
 				)
 				.httpBasic(Customizer.withDefaults())
-				.sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		return http.build();
+				.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.build();
 	}
 
 	@Bean
@@ -61,5 +50,15 @@ public class AppSecurityConfig {
 		return web -> web
 				.ignoring()
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/resources/**");
+	}
+
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return new UsuarioDetailsService();
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }

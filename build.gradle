@@ -2,7 +2,6 @@ buildscript {
 	repositories {
 		mavenLocal()
 		mavenCentral()
-		jcenter()
 	}
 }
 
@@ -18,7 +17,6 @@ targetCompatibility = javaVersion
 repositories {
 	mavenLocal()
 	mavenCentral()
-	jcenter()
 }
 
 subprojects {
@@ -37,6 +35,7 @@ subprojects {
 	ext {
 		javaVersion = javaVersion
 		springVersion = "6.1.6"
+		jwtVersion = '0.11.5'
 		slf4jVersion = '2.0.13'
 	}
 
@@ -57,4 +56,5 @@ subprojects {
 
 	compileJava.options.encoding = 'UTF-8'
 	group 'com.uoc.tumesa'
+	version '0.0.1-SNAPSHOT'
 }

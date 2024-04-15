@@ -1,4 +1,4 @@
-package com.uoc.tumesa.app.spring.sec;
+package com.uoc.tumesa.app.spring.sec.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +12,16 @@ import java.util.stream.Collectors;
  * */
 public record Usuario(String usuario, String password, List<RolUsuario> roles) implements UserDetails {
 
+	@Override
+	public String getUsername() {
+		return usuario;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
 	public List<RolUsuario> getRoles() {
 		return roles;
 	}
@@ -21,16 +31,6 @@ public record Usuario(String usuario, String password, List<RolUsuario> roles) i
 		return getRoles().stream()
 				.map(RolUsuario::getGrantedAuthority)
 				.collect(Collectors.toList());
-	}
-
-	@Override
-	public String getUsername() {
-		return usuario;
-	}
-
-	@Override
-	public String getPassword() {
-		return password;
 	}
 
 	@Override

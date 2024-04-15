@@ -1,4 +1,4 @@
-package com.uoc.tumesa.app.spring.sec;
+package com.uoc.tumesa.app.spring.sec.user;
 
 import com.google.common.collect.Lists;
 import org.springframework.security.core.userdetails.UserDetails;
