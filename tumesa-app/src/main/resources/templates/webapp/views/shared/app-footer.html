@@ -2,28 +2,14 @@
 <html lang="es">
 <th:template th:fragment="app-footer">
     <script type="application/javascript">
-        let appFooterComponent = Vue.defineComponent('app-footer', {
+        let appFooterComponent = Vue.defineComponent({
             template: '#app-footer-template',
-            props: { test: String },
             data() {
                 return {
-                    abc: ''
-                }
-            },
-            computed: {
-                abc() {
-                }
-            },
-            methods: {
-                modificar(valor) {
                 }
             }
         });
     </script>
-
-    <style>
-
-    </style>
 
     <script type="text/x-template" id="app-footer-template">
         <h1>Soy el footer</h1>
