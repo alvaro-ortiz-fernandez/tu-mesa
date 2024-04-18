@@ -1,27 +1,27 @@
 package com.uoc.tumesa.app.spring.config;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.concurrent.TimeUnit;
+
 @EnableWebMvc
 @Configuration
-@ComponentScan({
-    "com.uoc.tumesa.app.spring.web"
-})
 public class SpringWebConfig implements WebMvcConfigurer {
 
     @Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
+                .addResourceLocations("classpath:/assets/css/")
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));
         registry.addResourceHandler("/js/**")
-                .addResourceLocations("/js/");
+                .addResourceLocations("classpath:/assets/js/")
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("/images/");
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/");
+                .addResourceLocations("classpath:/assets/images/")
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));
     }
 }

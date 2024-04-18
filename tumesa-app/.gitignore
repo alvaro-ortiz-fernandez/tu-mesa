@@ -8,3 +8,5 @@
 /.idea/
 /project/
 /workspace.xml
+
+/src/main/resources/templates/webapp/.vscode

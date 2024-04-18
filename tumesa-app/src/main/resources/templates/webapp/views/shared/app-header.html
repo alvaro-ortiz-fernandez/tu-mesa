@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<th:template th:fragment="app-header">
+    <script type="application/javascript">
+        let appHeaderComponent = Vue.defineComponent('app-header', {
+            template: '#app-header-template',
+            props: { test: String },
+            data() {
+                return {
+                    abc: ''
+                }
+            },
+            computed: {
+                abc() {
+                }
+            },
+            methods: {
+                modificar(valor) {
+                }
+            }
+        });
+    </script>
+
+    <style>
+
+    </style>
+
+    <script type="text/x-template" id="app-header-template">
+        <h1>Soy el header</h1>
+    </script>
+</th:template>
+</html>
