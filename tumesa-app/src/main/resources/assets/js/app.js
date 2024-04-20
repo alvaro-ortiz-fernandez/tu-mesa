@@ -14,18 +14,29 @@ let app = {
 let router = VueRouter.createRouter({
     history: VueRouter.createMemoryHistory(),
     routes: [
-        { path: '/', component: loginComponent },
+        { path: '/', component: homeComponent },
         { path: '/login', component: loginComponent },
-        { path: '/signup', component: signupComponent }
+        { path: '/registro', component: signupComponent },
+        { path: '/usuario', component: userProfileComponent },
+        { path: '/administrador', component: adminProfileComponent },
+        { path: '/restaurantes', component: listComponent },
+        { path: '/restaurante', component: detailComponent },
+        { path: '/nueva-reserva', component: reservationComponent }
     ],
 });
 
 addEventListener("DOMContentLoaded", (event) => {
     Vue.createApp(app)
        .use(router)
-       .component('app-header', appHeaderComponent)
-       .component('app-footer', appFooterComponent)
-       .component('login', loginComponent)
-       .component('signup', signupComponent)
+           .component('app-header', appHeaderComponent)
+           .component('app-footer', appFooterComponent)
+           .component('login', loginComponent)
+           .component('signup', signupComponent)
+           .component('user-profile', userProfileComponent)
+           .component('admin-profile', adminProfileComponent)
+           .component('home', homeComponent)
+           .component('list', listComponent)
+           .component('detail', detailComponent)
+           .component('reservation', reservationComponent)
        .mount('#app');
 });

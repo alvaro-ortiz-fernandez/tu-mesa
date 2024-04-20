@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<th:template th:fragment="list">
+    <script type="application/javascript">
+        let listComponent = Vue.defineComponent({
+            template: '#list-template',
+            data() {
+                return {
+                }
+            }
+        });
+    </script>
+
+    <script type="text/x-template" id="list-template">
+        <h1>Soy el list</h1>
+    </script>
+</th:template>
+</html>
