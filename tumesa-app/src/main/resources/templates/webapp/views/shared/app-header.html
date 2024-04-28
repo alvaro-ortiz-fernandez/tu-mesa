@@ -6,13 +6,23 @@
             template: '#app-header-template',
             data() {
                 return {
+                    hide: false,
+                    hiddenPaths: [
+                        "/login",
+                        "/registro"
+                    ]
                 }
+            },
+            created() {
+                this.$router.afterEach((to, from) => {
+                    this.hide = this.hiddenPaths.includes(to.path);
+                })
             }
         });
     </script>
 
     <script type="text/x-template" id="app-header-template">
-        <h1>Soy el header</h1>
+        <h1 :class="{ 'd-none': hide }">Soy el header</h1>
     </script>
 </th:template>
 </html>

@@ -6,9 +6,11 @@
             template: '#home-template',
             data() {
                 return {
-                    goSignup() {
-                        this.$router.push({ path: 'registro' });
-                    }
+                }
+            },
+            methods: {
+                goLogin() {
+                    this.$router.push({ path: 'login' });
                 }
             }
         });
@@ -16,7 +18,7 @@
 
     <script type="text/x-template" id="home-template">
         <h1>Soy el home</h1>
-        <button @click="goSignup()">Ir</button>
+        <button @click="goLogin()">Ir al login</button>
     </script>
 </th:template>
 </html>

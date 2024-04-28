@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Metadatos -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="Aplicación de reserva de mesas">
+    <meta name="author" content="Álvaro Ortiz (UOC)">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png">
     <title>App</title>
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/vendors/icofont.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/vendors/themify.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/vendors/flag-icon.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/vendors/feather-icon.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/vendors/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/color-1.css" id="color" media="screen">
+    <link rel="stylesheet" type="text/css" href="/css/cuba/responsive.css">
+
+    <!-- JS -->
     <script src="/js/plugins/axios.js"></script>
     <script src="/js/plugins/vue.js"></script>
     <script src="/js/plugins/vue-router.js"></script>
     <script type="text/javascript" th:inline="javascript">
         let appPath = /*[[@{/}]]*/'/';
     </script>
+
+    <!-- Componentes Vue.js -->
     <th:block th:include="webapp/views/shared/app-header::app-header"></th:block>
     <th:block th:include="webapp/views/shared/app-footer::app-footer"></th:block>
     <th:block th:include="webapp/views/auth/login::login"></th:block>
@@ -28,7 +52,6 @@
     <div id="app">
         <app-header></app-header>
         <router-view></router-view>
-        {{ appPath }}
         <app-footer></app-footer>
     </div>
 </body>
