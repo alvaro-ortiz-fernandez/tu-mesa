@@ -28394,6 +28394,8 @@ ul.dot-group li {
     3.29 Login CSS Start
 ==========================**/
 .login-container {
+  background: url("/images/login/login_bg.jpg");
+  background-position: center;
 }
 .login-card {
   min-height: 100vh;
@@ -28401,8 +28403,6 @@ ul.dot-group li {
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  background: url("/images/login/login_bg.jpg");
-  background-position: center;
   padding: 30px 12px;
 }
 .login-card .logo {
@@ -36661,6 +36661,9 @@ table.table-bordered thead tr th p {
 
 .icon-lists {
   font-family: inherit;
+}
+a {
+    cursor: pointer;
 }
 
 /**=====================
