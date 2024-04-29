@@ -37379,6 +37379,7 @@ a {
 }
 .page-wrapper .page-header {
   max-width: 100vw;
+  position: fixed;
   top: 0;
   z-index: 8;
   transition: 0.5s;
@@ -37876,7 +37877,7 @@ a {
 }
 .page-wrapper .page-body-wrapper .page-title {
   padding: 15px 30px;
-  margin: 0 -27px 28px;
+  margin: 79px -27px 18px;
   background-color: #fff;
 }
 .page-wrapper .page-body-wrapper .page-title > .row {

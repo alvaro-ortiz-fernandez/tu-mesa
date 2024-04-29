@@ -23,17 +23,22 @@
 
     <script type="text/x-template" id="app-breadcrumb-template">
         <div class="container-fluid" :class="{ 'd-none': hide }">
-            <div class="row">
-                <div class="col-12">
-                    <ol class="breadcrumb mt-3">
-                        <li class="breadcrumb-item">
-                            <a @click.prevent="$router.push({ path: '/login' })">Login</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a @click.prevent="$router.push({ path: '/registro' })">Registro</a>
-                        </li>
-                        <li class="breadcrumb-item active">Default</li>
-                    </ol>
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>Sweet Alert</h4>
+                    </div>
+                    <div class="col-6">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a @click.prevent="$router.push({ path: '/login' })">Login</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a @click.prevent="$router.push({ path: '/registro' })">Registro</a>
+                            </li>
+                            <li class="breadcrumb-item active">Default</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
