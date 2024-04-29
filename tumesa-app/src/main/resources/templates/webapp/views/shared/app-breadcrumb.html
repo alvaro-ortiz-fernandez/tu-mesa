@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<th:template th:fragment="app-breadcrumb">
+    <script type="application/javascript">
+        let appBreadcrumbComponent = Vue.defineComponent({
+            template: '#app-breadcrumb-template',
+            data() {
+                return {
+                    hide: false,
+                    hiddenPaths: [
+                        "/login",
+                        "/registro"
+                    ]
+                }
+            },
+            created() {
+                this.$router.afterEach((to, from) => {
+                    this.hide = this.hiddenPaths.includes(to.path);
+                })
+            }
+        });
+    </script>
+
+    <script type="text/x-template" id="app-breadcrumb-template">
+        <div class="container-fluid" :class="{ 'd-none': hide }">
+            <div class="row">
+                <div class="col-12">
+                    <ol class="breadcrumb mt-3">
+                        <li class="breadcrumb-item">
+                            <a @click.prevent="$router.push({ path: '/login' })">Login</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a @click.prevent="$router.push({ path: '/registro' })">Registro</a>
+                        </li>
+                        <li class="breadcrumb-item active">Default</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </script>
+</th:template>
+</html>

@@ -23,5 +23,8 @@ public class SpringWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/assets/images/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));
+        registry.addResourceHandler("/fonts/**")
+                .addResourceLocations("classpath:/assets/fonts/")
+                .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));
     }
 }

@@ -37,6 +37,7 @@
 
     <!-- Componentes Vue.js -->
     <th:block th:include="webapp/views/shared/app-header::app-header"></th:block>
+    <th:block th:include="webapp/views/shared/app-breadcrumb::app-breadcrumb"></th:block>
     <th:block th:include="webapp/views/shared/app-footer::app-footer"></th:block>
     <th:block th:include="webapp/views/auth/login::login"></th:block>
     <th:block th:include="webapp/views/auth/signup::signup"></th:block>
@@ -49,10 +50,27 @@
     <script src="/js/app.js"></script>
 </head>
 <body>
-    <div id="app">
+    <div id="app" class="page-wrapper compact-wrapper">
+        <!-- Cabecera -->
         <app-header></app-header>
-        <router-view></router-view>
-        <app-footer></app-footer>
+
+        <div class="page-body-wrapper">
+            <div class="page-body">
+                <!-- Camino de migas -->
+                <app-breadcrumb></app-breadcrumb>
+
+                <!-- Contenido de la página -->
+                <div class="container-fluid">
+                    <div class="row widget-grid">
+                        <!-- Página actual -->
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie de página -->
+            <app-footer></app-footer>
+        </div>
     </div>
 </body>
 </html>

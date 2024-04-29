@@ -22,7 +22,15 @@
     </script>
 
     <script type="text/x-template" id="app-footer-template">
-        <h1 :class="{ 'd-none': hide }">Soy el footer</h1>
+        <footer class="footer" :class="{ 'd-none': hide }">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 footer-copyright text-center">
+                        <p class="mb-0">Copyright 2024 © UOC (Universitat Oberta de Catalunya)</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </script>
 </th:template>
 </html>

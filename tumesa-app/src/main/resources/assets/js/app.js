@@ -29,6 +29,7 @@ addEventListener("DOMContentLoaded", (event) => {
     Vue.createApp(app)
        .use(router)
            .component('app-header', appHeaderComponent)
+           .component('app-breadcrumb', appBreadcrumbComponent)
            .component('app-footer', appFooterComponent)
            .component('login', loginComponent)
            .component('signup', signupComponent)
