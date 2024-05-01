@@ -26,7 +26,7 @@ public class LoginController {
     public @ResponseBody ResponseEntity<?> login(@RequestBody LoginUser user) {
         try {
             logger.info("Autenticando al usuario '{}'...", user.getUser());
-            String jwtToken = jwtService.generateToken("4444");
+            String jwtToken = jwtService.generateToken(user.getUser());
 
             logger.info("Usuario '{}' autenticado correctamente.", user.getUser());
             return new ResponseEntity<>(jwtToken, HttpStatus.OK);
@@ -41,7 +41,7 @@ public class LoginController {
     public @ResponseBody ResponseEntity<?> registro(@RequestBody SignupUser user) {
         try {
             logger.info("Registrando al usuario '{}'...", user.getUser());
-            String jwtToken = jwtService.generateToken("4444");
+            String jwtToken = jwtService.generateToken(user.getUser());
 
             logger.info("Usuario '{}' registrado correctamente.", user.getUser());
             return new ResponseEntity<>(jwtToken, HttpStatus.OK);
