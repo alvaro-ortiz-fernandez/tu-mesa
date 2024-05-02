@@ -15,6 +15,7 @@ apply plugin: 'war'
 
 dependencies {
     implementation project(':tumesa-repository')
+    implementation project(':tumesa-lib')
 
     // Framework web
     implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -8,10 +8,6 @@ buildscript {
 apply plugin: 'war'
 
 dependencies {
-    implementation project(':tumesa-lib')
-
-    // Clases para conectar a la BBDD MongoDB
-    implementation 'org.mongodb:mongodb-driver-sync:4.11.1'
 }
 
 publishing {

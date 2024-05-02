@@ -34,7 +34,6 @@ subprojects {
 
 	ext {
 		javaVersion = javaVersion
-		springVersion = "6.1.6"
 		jwtVersion = '0.11.5'
 		slf4jVersion = '2.0.13'
 	}
