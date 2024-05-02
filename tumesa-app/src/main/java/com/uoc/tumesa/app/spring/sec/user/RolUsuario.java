@@ -12,6 +12,7 @@ import java.util.List;
 public record RolUsuario(String rol) {
 
     public static final RolUsuario USER = new RolUsuario("USER");
+    public static final RolUsuario ADMIN = new RolUsuario("ADMIN");
 
 
     public String getAuthority() {

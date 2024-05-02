@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Representa a un usuario en la aplicación.
  * */
-public record Usuario(String usuario, String password, List<RolUsuario> roles) implements UserDetails {
+public record Usuario(String usuario, String password, String jwtToken, List<RolUsuario> roles) implements UserDetails {
 
 	@Override
 	public String getUsername() {

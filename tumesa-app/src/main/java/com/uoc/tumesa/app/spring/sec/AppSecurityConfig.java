@@ -1,6 +1,9 @@
 package com.uoc.tumesa.app.spring.sec;
 
+import com.uoc.tumesa.app.spring.sec.jwt.JwtService;
 import com.uoc.tumesa.app.spring.sec.user.UsuarioDetailsService;
+import com.uoc.tumesa.repo.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +22,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig {
+
+	@Autowired
+	private Repository repository;
+
+	@Autowired
+	private JwtService jwtService;
 
 	@Bean
 	public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder,
@@ -52,9 +61,9 @@ public class AppSecurityConfig {
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/resources/**");
 	}
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		return new UsuarioDetailsService();
+	@Bean(name = "userDetailsService")
+	public UsuarioDetailsService userDetailsService() {
+		return new UsuarioDetailsService(repository, jwtService);
 	}
 
 	@Bean
