@@ -7,7 +7,7 @@ import com.uoc.tumesa.app.spring.sec.jwt.JwtService;
 import com.uoc.tumesa.repo.Repository;
 import com.uoc.tumesa.repo.dao.UsersDAO;
 import com.uoc.tumesa.repo.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -29,10 +29,20 @@ public class UsuarioDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public Usuario loadUserByUsername(String username) throws UsernameNotFoundException {
         return findUserByName(username)
                 .map(this::toUsuario)
                 .orElseThrow(() -> new NoSuchElementException(String.format("No se encontró al usuario %s", username)));
+    }
+
+    /**
+     * Método que obtiene el usuario asociado a la petición indicada.
+     * */
+    public Usuario getUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String username = jwtService.extractUsername(token);
+
+        return loadUserByUsername(username);
     }
 
     /**

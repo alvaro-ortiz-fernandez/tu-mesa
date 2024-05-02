@@ -6,7 +6,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 let app = {
     data() {
         return {
-            appPath: appPath
+            user: undefined
+        }
+    },
+    methods: {
+        addAuthorization(user, authorization) {
+            this.user = user;
+            axios.defaults.headers.common['Authorization'] = authorization;
         }
     }
 };

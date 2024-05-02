@@ -23,6 +23,7 @@
                             })
                             .then((response) => {
                                 NotificationService.hideLoading();
+                                this.$root.addAuthorization(this.user, response.data); // Token JWT
                                 this.$router.push({ path: '/' });
                                 NotificationService.showSuccessToast("Sesión iniciada");
                             })
