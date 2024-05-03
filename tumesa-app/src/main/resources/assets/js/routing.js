@@ -4,9 +4,9 @@ const router = VueRouter.createRouter({
         { path: '/', component: homeComponent, meta: {
             private: false,
             breadcrumb: {
-                title: 'Restaurantes',
+                title: 'Inicio',
                 paths: [
-                    { title: 'Restaurantes', active: true }
+                    { title: 'Inicio', active: true }
                 ]
             }
         } },
@@ -15,7 +15,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Login',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Login', active: true }
                 ]
             }
@@ -25,7 +25,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Registro',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Registro', active: true }
                 ]
             }
@@ -35,7 +35,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Perfil de usuario',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Perfil de usuario', active: true }
                 ]
             }
@@ -45,7 +45,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Perfil de usuario',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Perfil de usuario', active: true }
                 ]
             }
@@ -55,7 +55,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Listado de restaurantes',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Listado de restaurantes', active: true }
                 ]
             }
@@ -65,7 +65,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Restaurante',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Listado de restaurantes', path: '/restaurantes', active: false },
                     { title: 'Restaurante', active: true }
                 ]
@@ -76,7 +76,7 @@ const router = VueRouter.createRouter({
             breadcrumb: {
                 title: 'Crear reserva',
                 paths: [
-                    { title: 'Restaurantes', path: '/', active: false },
+                    { title: 'Inicio', path: '/', active: false },
                     { title: 'Listado de restaurantes', path: '/restaurantes', active: false },
                     { title: 'Restaurante', path: '/restaurante', active: false },
                     { title: 'Crear reserva', active: true }

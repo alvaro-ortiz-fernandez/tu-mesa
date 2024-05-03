@@ -5650,10 +5650,6 @@ body.modal-open .select2-container--open .select2-dropdown {
   --bs-breadcrumb-divider: "";
 }
 
-.breadcrumb-item.active {
-  text-transform: capitalize;
-}
-
 .breadcrumb-space .breadcrumb-item::before {
   padding-right: 0;
 }
