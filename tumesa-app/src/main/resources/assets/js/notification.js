@@ -10,6 +10,15 @@ class NotificationServiceImpl {
         });
     }
 
+    showSuccessAlert(title = "Operación completada", message = undefined, closeCallback = () => {}) {
+        Swal.fire({
+            title: title,
+            text: message,
+            icon: "success",
+            willClose: closeCallback
+        });
+    }
+
     hideLoading() {
         Swal.close()
     }

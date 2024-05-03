@@ -23,6 +23,14 @@
                 authenticated() {
                     return !!(this.user);
                 }
+            },
+            methods: {
+                logout() {
+                    let _this = this;
+                    NotificationService.showSuccessAlert("Sesión finalizada", "Puede volver a iniciar sesión si lo desea.", () => {
+                        _this.$root.removeAuthorization();
+                    });
+                }
             }
         });
     </script>
@@ -70,7 +78,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a @click.prevent="$router.push({ path: '/logout' })">
+                                    <a @click.prevent="logout">
                                         <i class="fa fa-sign-out me-2"></i>
                                         <span>Cerrar sesión</span>
                                     </a>
