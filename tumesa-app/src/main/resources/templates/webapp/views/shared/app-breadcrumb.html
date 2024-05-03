@@ -10,33 +10,32 @@
                     hiddenPaths: [
                         "/login",
                         "/registro"
-                    ]
+                    ],
+                    breadcrumbData: this?.$router?.currentRoute?.value?.meta?.breadcrumb
                 }
             },
             created() {
                 this.$router.afterEach((to, from) => {
                     this.hide = this.hiddenPaths.includes(to.path);
+                    this.breadcrumbData = this?.$router?.currentRoute?.value?.meta?.breadcrumb;
                 })
             }
         });
     </script>
 
     <script type="text/x-template" id="app-breadcrumb-template">
-        <div class="container-fluid" :class="{ 'd-none': hide }">
-            <div class="page-title">
+        <div class="container-fluid">
+            <div v-if="!hide && !!(breadcrumbData)" class="page-title">
                 <div class="row">
                     <div class="col-6">
-                        <h4>Sweet Alert</h4>
+                        <h4>{{ breadcrumbData.title }}</h4>
                     </div>
                     <div class="col-6">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a @click.prevent="$router.push({ path: '/login' })">Login</a>
+                            <li v-for="path in breadcrumbData.paths" :key="path.title" class="breadcrumb-item" :class="{ 'active': path.active }">
+                                <a v-if="!path.active" @click.prevent="$router.push({ path: path.path })">{{ path.title }}</a>
+                                <span v-else>{{ path.title }}</span>
                             </li>
-                            <li class="breadcrumb-item">
-                                <a @click.prevent="$router.push({ path: '/registro' })">Registro</a>
-                            </li>
-                            <li class="breadcrumb-item active">Default</li>
                         </ol>
                     </div>
                 </div>

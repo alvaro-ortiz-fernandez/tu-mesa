@@ -33,20 +33,6 @@ let app = {
     }
 };
 
-let router = VueRouter.createRouter({
-    history: VueRouter.createMemoryHistory(),
-    routes: [
-        { path: '/', component: homeComponent, meta: { private: false } },
-        { path: '/login', component: loginComponent, meta: { private: false } },
-        { path: '/registro', component: signupComponent, meta: { private: false } },
-        { path: '/usuario', component: userProfileComponent, meta: { private: true } },
-        { path: '/administrador', component: adminProfileComponent, meta: { private: true } },
-        { path: '/restaurantes', component: listComponent, meta: { private: false } },
-        { path: '/restaurante', component: detailComponent, meta: { private: false } },
-        { path: '/nueva-reserva', component: reservationComponent, meta: { private: true } }
-    ],
-});
-
 addEventListener("DOMContentLoaded", (event) => {
     Vue.createApp(app)
        .use(router)
