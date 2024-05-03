@@ -12,7 +12,55 @@
     </script>
 
     <script type="text/x-template" id="user-profile-template">
-        <h1>Soy el user-profile</h1>
+        <div class="user-profile">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card hovercard text-center">
+                        <div class="cardheader"></div>
+                        <div class="user-image">
+                            <div class="avatar"><img alt="" src="/images/user/7.png"></div>
+                        </div>
+                        <div class="info">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="user-designation">
+                                        <div class="title"><span>{{ $root.user }}</span></div>
+                                        <div class="desc">Cliente</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <h6 class="mb-1">
+                                        <i class="fa fa-envelope"></i>
+                                           Email
+                                    </h6>
+                                    <span>Marekjecno@yahoo.com</span>
+                                </div>
+                                <div class="col-6">
+                                    <h6 class="mb-1">
+                                        <i class="fa fa-calendar"></i>
+                                           Fecha de registro
+                                    </h6>
+                                    <span>02 January 1988</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="follow">
+                                <div class="row">
+                                    <div class="col-6 text-md-end border-right">
+                                        <div class="follow-num counter">25869</div><span>Reservas</span>
+                                    </div>
+                                    <div class="col-6 text-md-start">
+                                        <div class="follow-num counter">659887</div><span>Algo pondré aquí</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 </th:template>
 </html>
