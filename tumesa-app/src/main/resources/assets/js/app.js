@@ -1,12 +1,12 @@
 axios.defaults.baseURL = appPath;
-axios.defaults.headers.common['Authorization'] = '';
+axios.defaults.headers.common['Authorization'] = localStorage.getItem("tumesa-authorization");
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
 let app = {
     data() {
         return {
-            user: undefined
+            user: localStorage.getItem("tumesa-user")
         }
     },
     created() {
@@ -25,10 +25,16 @@ let app = {
         addAuthorization(user, authorization) {
             this.user = user;
             axios.defaults.headers.common['Authorization'] = authorization;
+
+            localStorage.setItem("tumesa-user", user);
+            localStorage.setItem("tumesa-authorization", authorization);
         },
         removeAuthorization() {
             this.user = undefined;
             axios.defaults.headers.common['Authorization'] = '';
+
+            localStorage.removeItem("tumesa-user");
+            localStorage.removeItem("tumesa-authorization");
         }
     }
 };
