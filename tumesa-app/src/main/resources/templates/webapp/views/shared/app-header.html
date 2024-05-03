@@ -74,14 +74,14 @@
                                 </div>
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
-                                <li>
-                                    <a @click.prevent="$router.push({ path: '/usuario' })">
+                                <li @click.prevent="$router.push({ path: '/usuario' })">
+                                    <a>
                                         <i class="fa fa-user me-2"></i>
                                         <span>Mi cuenta</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a @click.prevent="logout">
+                                <li @click.prevent="logout">
+                                    <a>
                                         <i class="fa fa-sign-out me-2"></i>
                                         <span>Cerrar sesión</span>
                                     </a>
