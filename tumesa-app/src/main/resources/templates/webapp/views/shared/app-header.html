@@ -29,6 +29,9 @@
                     let _this = this;
                     NotificationService.showSuccessAlert("Sesión finalizada", "Puede volver a iniciar sesión si lo desea.", () => {
                         _this.$root.removeAuthorization();
+
+                        if (_this.$router.currentRoute.value.meta.private)
+                            _this.$router.push({ path: '/' });
                     });
                 }
             }
