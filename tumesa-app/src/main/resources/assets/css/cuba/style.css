@@ -37864,6 +37864,8 @@ a {
 }
 .page-wrapper .page-body-wrapper .page-body {
   min-height: calc(100vh - 136px);
+  max-width: 1350px;
+  margin: auto;
   padding: 0 15px 0 15px;
   position: relative;
   transition: 0.5s;
@@ -37874,7 +37876,6 @@ a {
 .page-wrapper .page-body-wrapper .page-title {
   padding: 15px 30px;
   margin: 79px -27px 18px;
-  background-color: #fff;
 }
 .page-wrapper .page-body-wrapper .page-title > .row {
   margin: 0;
