@@ -4,6 +4,7 @@ const router = VueRouter.createRouter({
         { path: '/', component: homeComponent, meta: {
             private: false,
             breadcrumb: {
+                show: false,
                 title: 'Inicio',
                 paths: [
                     { title: 'Inicio', active: true }
@@ -13,6 +14,7 @@ const router = VueRouter.createRouter({
         { path: '/login', component: loginComponent, meta: {
             private: false,
             breadcrumb: {
+                show: false,
                 title: 'Login',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -23,6 +25,7 @@ const router = VueRouter.createRouter({
         { path: '/registro', component: signupComponent, meta: {
             private: false,
             breadcrumb: {
+                show: false,
                 title: 'Registro',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -33,6 +36,7 @@ const router = VueRouter.createRouter({
         { path: '/usuario', component: userProfileComponent, meta: {
             private: true,
             breadcrumb: {
+                show: true,
                 title: 'Perfil de usuario',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -43,6 +47,7 @@ const router = VueRouter.createRouter({
         { path: '/administrador', component: adminProfileComponent, meta: {
             private: true,
             breadcrumb: {
+                show: true,
                 title: 'Perfil de usuario',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -53,6 +58,7 @@ const router = VueRouter.createRouter({
         { path: '/restaurantes', component: listComponent, meta: {
             private: false,
             breadcrumb: {
+                show: true,
                 title: 'Listado de restaurantes',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -63,6 +69,7 @@ const router = VueRouter.createRouter({
         { path: '/restaurante', component: detailComponent, meta: {
             private: false,
             breadcrumb: {
+                show: true,
                 title: 'Restaurante',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },
@@ -74,6 +81,7 @@ const router = VueRouter.createRouter({
         { path: '/nueva-reserva', component: reservationComponent, meta: {
             private: true,
             breadcrumb: {
+                show: true,
                 title: 'Crear reserva',
                 paths: [
                     { title: 'Inicio', path: '/', active: false },

@@ -6,17 +6,11 @@
             template: '#app-breadcrumb-template',
             data() {
                 return {
-                    hide: false,
-                    hiddenPaths: [
-                        "/login",
-                        "/registro"
-                    ],
                     breadcrumbData: this?.$router?.currentRoute?.value?.meta?.breadcrumb
                 }
             },
             created() {
                 this.$router.afterEach((to, from) => {
-                    this.hide = this.hiddenPaths.includes(to.path);
                     this.breadcrumbData = this?.$router?.currentRoute?.value?.meta?.breadcrumb;
                 })
             }
@@ -25,7 +19,7 @@
 
     <script type="text/x-template" id="app-breadcrumb-template">
         <div class="container-fluid">
-            <div v-if="!hide && !!(breadcrumbData)" class="page-title">
+            <div v-if="!!(breadcrumbData) && breadcrumbData.show" class="page-title">
                 <div class="row">
                     <div class="col-6">
                         <h6>{{ breadcrumbData.title }}</h6>

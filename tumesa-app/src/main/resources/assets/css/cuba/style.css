@@ -28394,7 +28394,7 @@ ul.dot-group li {
   background-position: center;
 }
 .login-card {
-  min-height: 100vh;
+  min-height: calc(100vh - 136px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37865,7 +37865,7 @@ a {
 .page-wrapper .page-body-wrapper .page-body {
   min-height: calc(100vh - 136px);
   max-width: 1350px;
-  margin: auto;
+  margin: 79px auto auto auto;
   padding: 0 15px 0 15px;
   position: relative;
   transition: 0.5s;
@@ -37874,8 +37874,10 @@ a {
   animation: fadeIn 0.5s ease-in-out;
 }
 .page-wrapper .page-body-wrapper .page-title {
-  padding: 15px 30px;
-  margin: 79px -27px 18px;
+  padding: 20px 0;
+}
+.page-wrapper .page-body-wrapper .page-title h6 {
+  font-size: calc(12px + 3 * (100vw - 320px) / 880);
 }
 .page-wrapper .page-body-wrapper .page-title > .row {
   margin: 0;
