@@ -12,7 +12,174 @@
     </script>
 
     <script type="text/x-template" id="home-template">
-        <h1>Soy el home</h1>
+        <section class="home-sections">
+            <!-- Título y formulario inicial -->
+            <article class="home">
+                <div class="custom-container container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="home-content">
+                                <h1 class="mb-2">Gestiona las <b>reservas</b> de tus restaurantes favoritos</h1>
+                                <p>¿Cansado de la misma comida? Explora las ofertas gastronómicas disponibles desde esta aplicación.</p>
+
+                                <div class="card height-equal">
+                                    <div class="card-body custom-input">
+                                        <h4>Busca tu restaurante</h4>
+                                        <p class="f-m-light mt-1 mb-2">Encuentra el restaurante perfecto y ahorra tiempo gestionando tus reservas.</p>
+
+                                        <form class="form-wizard" action="#" method="POST">
+                                            <div class="tab">
+                                                <div class="row g-3">
+                                                    <div class="col-sm-12">
+                                                        <input class="form-control" type="text" placeholder="Introduzca un nombre..." required="required">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="text-end pt-3">
+                                                    <button class="btn btn-primary" type="button">Buscar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-lg-block d-none">
+                            <div class="home-image text-end d-md-block d-none">
+                                <img class="img-fluid" src="/images/home/1.webp" alt="mobile">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Características -->
+            <article class="features">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 wow pulse">
+                            <div class="landing-title text-center">
+                                <h2 class="mb-2">Conoce las <span class="gradient-5">principales funcionalidades</span></h2>
+                                <p>Descubre un mundo de posibilidades culinarias con nuestra aplicación. Explora, busca, encuentra y disfruta de una experiencia gastronómica única a tu alcance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-8">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/8.svg" alt=""></div>
+                                <h5 class="mb-2">Búsqueda de restaurantes</h5>
+                                <p class="mb-0 f-light">Descubre una amplia selección de restaurantes según ubicación, tipo de cocina y precios, con herramientas de filtrado intuitivas</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-4">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/4.svg" alt=""></div>
+                                <h5 class="mb-2">Consulta de disponibilidad</h5>
+                                <p class="mb-0 f-light">Verifica la disponibilidad de mesas en tiempo real, asegurando que siempre encuentres un lugar en el momento que lo necesites</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-3">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/3.svg" alt=""></div>
+                                <h5 class="mb-2">Gestión de reservas</h5>
+                                <p class="mb-0 f-light">Organiza y administra tus reservas con facilidad, desde la creación inicial hasta la modificación o cancelación</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-3">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/5.svg" alt=""></div>
+                                <h5 class="mb-2">Recepción de notificaciones</h5>
+                                <p class="mb-0 f-light">Mantente informado sobre el estado de tus reservas y recibe actualizaciones sobre ofertas especiales de tus planes gastronómicos</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-7">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/7.svg" alt=""></div>
+                                <h5 class="mb-2">Generación de informes</h5>
+                                <p class="mb-0 f-light">Obtén una visión detallada del rendimiento del restaurante y el comportamiento de los clientes con informes personalizabless</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="feature-box common-card bg-feature-1">
+                                <div class="feature-icon"> <img src="/images/home/feature-icon/1.svg" alt=""></div>
+                                <h5 class="mb-2">API Rest</h5>
+                                <p class="mb-0 f-light">Aprovecha nuestra API Rest para integrar fácilmente nuestra plataforma con otros sistemas y servicios</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Tecnologías -->
+            <article class="frameworks">
+                <div class="container">
+                    <div class="row g-xxl-5 g-4">
+                        <div class="col-sm-12">
+                            <div class="landing-title text-center mb-0">
+                                <h2 class="mb-2"><span class="gradient-1">Tecnologías</span> que componen este sistema</h2>
+                                <p>A continuación, se listan los lenguajes y herramientas principales con las que se ha desarrollado el servidor y el cliente de esta aplicación.</p>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/java.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">Java 21</h5>
+                                    <p class="f-light">Lenguaje de programación multiplataforma ampliamente utilizado en el desarrollo de aplicaciones empresariales, web y móviles.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/spring.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">Spring Boot 3</h5>
+                                    <p class="f-light">Framework Java que permite el desarrollo de aplicaciones web, con características fundamentales como la gestión de peticiones HTTP.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/mongo.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">MongoDB</h5>
+                                    <p class="f-light">Base de datos NoSQL orientada a documentos con un modelo de datos flexible y mayor capacidad para manejar grandes volúmenes de datos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/vue.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">Vue 3</h5>
+                                    <p class="f-light">Framework JavaScript utilizado para construir interfaces de usuario interactivas y dinámicas.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/bootstrap.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">Bootstrap 5</h5>
+                                    <p class="f-light">Framework CSS que facilita el diseño web responsive a través de una gama de componentes y estilos para la creación de interfaces web.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="framework-box">
+                                <div class="frame-icon"> <img src="/images/home/icon/gradle.png" alt=""></div>
+                                <div class="frame-details">
+                                    <h5 class="mb-2">Gradle 8</h5>
+                                    <p class="f-light">Herramienta encargada de la automatización sobre construcción de proyectos, gestión de dependencias y publicación de versiones.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
     </script>
 </th:template>
 </html>

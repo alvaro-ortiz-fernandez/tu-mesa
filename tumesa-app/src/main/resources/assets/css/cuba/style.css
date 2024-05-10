@@ -7497,9 +7497,6 @@ btn-group .dropdown-wrapper .input-group .input-group-text {
     2.17 Form-wizard CSS Start
 ==========================**/
 /*Form Wizard One Start*/
-.form-wizard .tab {
-  display: none;
-}
 .form-wizard .step {
   height: 10px;
   width: 10px;
@@ -27074,6 +27071,10 @@ footer {
   width: 100%;
   transition: width 0.5s;
 }
+.feature-box .feature-icon img {
+  width: 26px;
+  height: 26px;
+}
 .feature-box .feature-icon {
   width: 44px;
   height: 44px;
@@ -27081,7 +27082,7 @@ footer {
   align-items: center;
   justify-content: center;
   border-radius: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 .feature-box.bg-feature-1 .feature-icon {
   background: #FBECEC;
@@ -37864,17 +37865,22 @@ a {
 }
 .page-wrapper .page-body-wrapper .page-body {
   min-height: calc(100vh - 136px);
-  max-width: 1350px;
   margin: 79px auto auto auto;
-  padding: 0 15px 0 15px;
   position: relative;
   transition: 0.5s;
+}
+.page-wrapper .page-body-wrapper .page-container {
+  max-width: 1350px;
+  margin: auto;
+  padding: 0;
 }
 .page-wrapper .page-body-wrapper .page-body:before {
   animation: fadeIn 0.5s ease-in-out;
 }
 .page-wrapper .page-body-wrapper .page-title {
   padding: 20px 0;
+  max-width: 1350px;
+  margin: auto;
 }
 .page-wrapper .page-body-wrapper .page-title h6 {
   font-size: calc(12px + 3 * (100vw - 320px) / 880);

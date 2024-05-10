@@ -1,3 +1,23 @@
+/*///////// Estilos globales /////////*/
 body {
     background-color: #F7F8F9 !important;
+}
+
+/*///////// Home /////////*/
+.home-sections .home,
+.home-sections .features,
+.home-sections .frameworks {
+    padding-bottom: 4rem;
+}
+.home {
+    background-image: url(/images/home/bg.webp);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    padding: 3rem 0 4rem 0;
+}
+.home .home-content .card {
+    background: rgba(255, 255, 255, 0.4);
+}
+.home .home-content input.form-control {
+    background: rgba(255, 255, 255, 0);
 }
