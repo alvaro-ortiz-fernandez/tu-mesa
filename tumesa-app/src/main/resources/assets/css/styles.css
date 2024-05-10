@@ -2,6 +2,12 @@
 body {
     background-color: #F7F8F9 !important;
 }
+.w-100 {
+    width: 100%;
+}
+.rating .fa-star, .rating .fa-star-half {
+    color: #ffe859;
+}
 
 /*///////// Home /////////*/
 .home-sections .home,
