@@ -4,6 +4,9 @@ import com.uoc.tumesa.app.spring.sec.user.Usuario;
 
 import javax.annotation.Nullable;
 
+/**
+ * Clase DTO para informar al frontend del resultado de autenticación de un usuario.
+ * */
 public record LoginResult(Result result, @Nullable Usuario user) {
 
     public enum Result {
