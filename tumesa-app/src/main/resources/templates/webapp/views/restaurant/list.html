@@ -4,8 +4,70 @@
     <script type="application/javascript">
         let listComponent = Vue.defineComponent({
             template: '#list-template',
+            data() {
+                return {
+                    restaurants: [],
+                    terminoBusqueda: '',
+                    orden: 'aleatorio',
+                    animations: AOSAnimations,
+                    loading: true
+                }
+            },
             created() {
                 AOS.init();
+
+                if (this.$route.query?.term)
+                    this.terminoBusqueda = this.$route.query.term;
+
+                this.buscar();
+            },
+            watch: {
+                orden() {
+                    this.buscar();
+                }
+            },
+            methods: {
+                buscar() {
+                    this.loading = true;
+
+                    setTimeout(() => {
+                        axios.post('/restaurantes', {
+                            termino: this.terminoBusqueda
+                        })
+                        .then((response) => {
+                            this.restaurants = this.shortRestaurants(response.data);
+                            this.loading = false;
+                        })
+                        .catch((error) => {
+                            console.error("Se produjo un error al buscar los restaurantes: ", error);
+                            NotificationService.showWarningToast();
+                            this.loading = false;
+                        });
+                    }, 200);
+                },
+                shortRestaurants(restaurants) {
+                    switch (this.orden) {
+                        case 'aleatorio':
+                            return this.ordenAleatorio(restaurants);
+                        case 'puntuacion':
+                            return restaurants.sort((a, b) =>  a.rating > b.rating ? -1 : a.rating === b.rating ? 0 : 1);
+                        default:
+                            return restaurants;
+                    }
+                },
+                ordenAleatorio(restaurantes) {
+                    let currentIndex = restaurantes.length;
+
+                    while (currentIndex != 0) {
+                        let randomIndex = Math.floor(Math.random() * currentIndex);
+                        currentIndex--;
+
+                        [restaurantes[currentIndex], restaurantes[randomIndex]] = [
+                            restaurantes[randomIndex], restaurantes[currentIndex]];
+                    }
+
+                    return restaurantes;
+                }
             }
         });
     </script>
@@ -19,12 +81,12 @@
                     <div class="collapse card d-lg-block mb-3">
                         <div class="accordion" >
                             <div class="accordion-item">
-                                <h6 class="accordion-header px-4 py-3 bg-light text-dark">Nombre</h6>
+                                <h6 class="accordion-header px-4 py-3 bg-light text-dark" :class="{ 'disabled': loading }">Nombre</h6>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body input-group-wrapper">
                                         <div class="input-group">
-                                            <input class="form-control" type="text" placeholder="Nombre">
-                                            <button class="btn btn-outline-primary" id="button-addon2" type="button">Buscar</button>
+                                            <input class="form-control" type="text" placeholder="Nombre" v-model="terminoBusqueda" :class="{ 'disabled': loading }">
+                                            <button class="btn btn-outline-primary" @click="buscar" :class="{ 'disabled': loading }">Buscar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -35,38 +97,38 @@
                     <div class="collapse card d-lg-block mb-3">
                         <div class="accordion">
                             <div class="accordion-item">
-                                <h6 class="accordion-header px-4 py-3 bg-light text-dark">Categorías</h6>
+                                <h6 class="accordion-header px-4 py-3 bg-light text-dark" :class="{ 'disabled': loading }">Categorías</h6>
                                 <div class="accordion-collapse collapse show">
                                     <div class="accordion-body checkbox-checked">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-1" checked />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-1" checked :disabled="loading" />
                                             <label class="form-check-label" for="categoria-1">Categoría 1</label>
-                                            <span class="badge badge-danger float-end">120</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">120</span>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-2" checked />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-2" checked :disabled="loading" />
                                             <label class="form-check-label" for="categoria-2">Categoría 2</label>
-                                            <span class="badge badge-danger float-end">15</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">15</span>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-3" checked />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-3" checked :disabled="loading" />
                                             <label class="form-check-label" for="categoria-3">Categoría 3</label>
-                                            <span class="badge badge-danger float-end">35</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">35</span>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-4" checked />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-4" checked :disabled="loading" />
                                             <label class="form-check-label" for="categoria-4">Categoría 4</label>
-                                            <span class="badge badge-danger float-end">89</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">89</span>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-5" />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-5" :disabled="loading" />
                                             <label class="form-check-label" for="categoria-5">Categoría 5</label>
-                                            <span class="badge badge-danger float-end">30</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">30</span>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="categoria-6" />
+                                            <input class="form-check-input" type="checkbox" value="" id="categoria-6" :disabled="loading" />
                                             <label class="form-check-label mb-0" for="categoria-6">Categoría 6</label>
-                                            <span class="badge badge-danger float-end">30</span>
+                                            <span class="badge badge-danger float-end" :class="{ 'disabled': loading }">30</span>
                                         </div>
                                     </div>
                                 </div>
@@ -74,424 +136,55 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Aviso de carga -->
+                <div v-if="loading" class="col-lg-9">
+                    <div class="d-flex justify-content-center">
+                        <div class="app-loader"></div>
+                    </div>
+                </div>
+
                 <!-- Listado de restaurantes -->
-                <div class="col-lg-9">
+                <div v-else class="col-lg-9">
                     <!-- Nº de resultados y ordenación -->
                     <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-                        <strong class="d-block py-2">32 Resultados</strong>
+                        <strong class="d-block py-2">{{ restaurants.length }} Resultados</strong>
                         <div class="ms-auto">
-                            <select class="form-select d-inline-block w-auto border pt-1">
+                            <select class="form-select d-inline-block w-auto border pt-1" v-model="orden">
+                                <option value="aleatorio" selected>Aleatorio</option>
                                 <option value="puntuacion">Puntuación</option>
-                                <option value="aleatorio">Aleatorio</option>
                             </select>
                         </div>
                     </header>
 
                     <!-- Restaurantes -->
                     <div class="row gallery grid my-gallery mb-4" id="aniimated-thumbnials">
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
+                        <figure v-for="restaurant in restaurants" :key="restaurant.name" class="grid-item col-sm-4" :data-aos="animations[Math.floor(Math.random() * animations.length)]">
                             <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
+                                <img class="card-img-top p-0" :src="'/images/restaurant/' + restaurant.images.main + '.jpg'" />
                                 <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
+                                    <h5 class="card-title">{{ restaurant.name }}</h5>
                                     <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
+                                        <i v-if="restaurant.rating === 0.5" class="fa fa-star-half"></i>
+                                        <i v-if="restaurant.rating >= 1" class="fa fa-star"></i>
+                                        <i v-if="restaurant.rating === 1.5" class="fa fa-star-half"></i>
+                                        <i v-if="restaurant.rating >= 2" class="fa fa-star"></i>
+                                        <i v-if="restaurant.rating === 2.5" class="fa fa-star-half"></i>
+                                        <i v-if="restaurant.rating >= 3" class="fa fa-star"></i>
+                                        <i v-if="restaurant.rating === 3.5" class="fa fa-star-half"></i>
+                                        <i v-if="restaurant.rating >= 4" class="fa fa-star"></i>
+                                        <i v-if="restaurant.rating === 4.5" class="fa fa-star-half"></i>
+                                        <i v-if="restaurant.rating >= 5" class="fa fa-star"></i>
+                                        <small class="ms-2 text-secondary">{{ restaurant.comments.length }} reseñas</small>
                                     </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
+                                    <p class="card-text mb-2 pb-1">{{ restaurant.description }}</p>
                                     <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </figure>
-                        <figure class="grid-item col-sm-4" data-aos="fade-down">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img class="card-img-top p-0" src="https://media.admagazine.com/photos/6413c50c0181e6a3029f340c/16:9/w_2560%2Cc_limit/FIID_21_12_22_SALAZAR_6253.jpg" />
-                                <div class="card-body d-flex flex-column pt-3 pb-4">
-                                    <h5 class="card-title">La Vaca Argentina</h5>
-                                    <div class="rating pb-2">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half"></i>
-                                        <small class="ms-2 text-secondary">159 reseñas</small>
-                                    </div>
-                                    <p class="card-text mb-2 pb-1">Restaurante de carne, Barbacoa, Argentina</p>
-                                    <div class="card-footer pt-3 px-0 pb-0 w-100 text-center">
-                                        <a @click.prevent="" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
+                                        <a @click.prevent="$router.push({ path: '/restaurante/' + restaurant.name })" class="btn btn-primary shadow-0 mt-1 me-1">Ver detalle</a>
                                     </div>
                                 </div>
                             </div>
                         </figure>
                     </div> <!-- Restaurantes -->
-
-                    <!-- <div class="row gallery grid my-gallery mb-4" id="aniimated-thumbnials">
-                        <figure class="grid-item col-sm-3" data-aos="fade-down">
-                            <img class="img-thumbnail" src="/images/masonry/1.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out-down">
-                            <img class="img-thumbnail" src="/images/masonry/2.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/3.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/4.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/5.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/6.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/7.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/8.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/9.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/10.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/11.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/12.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/14.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-left">
-                            <img class="img-thumbnail" src="/images/masonry/15.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/13.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out">
-                            <img class="img-thumbnail" src="/images/masonry/4.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-right">
-                            <img class="img-thumbnail" src="/images/masonry/5.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out">
-                            <img class="img-thumbnail" src="/images/masonry/6.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out-up">
-                            <img class="img-thumbnail" src="/images/masonry/7.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out-down">
-                            <img class="img-thumbnail" src="/images/masonry/8.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/9.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="slide-up">
-                            <img class="img-thumbnail" src="/images/masonry/10.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/9.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/10.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/11.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="fade-up">
-                            <img class="img-thumbnail" src="/images/masonry/12.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/14.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-left">
-                            <img class="img-thumbnail" src="/images/masonry/15.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-down">
-                            <img class="img-thumbnail" src="/images/masonry/13.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out">
-                            <img class="img-thumbnail" src="/images/masonry/4.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="flip-right">
-                            <img class="img-thumbnail" src="/images/masonry/5.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out">
-                            <img class="img-thumbnail" src="/images/masonry/6.jpg" alt="Image description">
-                        </figure>
-                        <figure class="grid-item col-sm-3" data-aos="zoom-out-up">
-                            <img class="img-thumbnail" src="/images/masonry/7.jpg" alt="Image description">
-                        </figure>
-                    </div>-->
                 </div>
             </div>
         </section>

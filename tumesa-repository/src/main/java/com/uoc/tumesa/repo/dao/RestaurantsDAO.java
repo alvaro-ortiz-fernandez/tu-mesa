@@ -8,12 +8,13 @@ import com.uoc.tumesa.repo.model.Restaurant.Images;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public class RestaurantsDAO extends AppDAO<Restaurant> {
 
@@ -21,6 +22,21 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
         super(db, "restaurants");
     }
 
+    public Optional<Restaurant> findByName(String name) {
+        return find(collection
+                .find(eq("name", name))
+                .first());
+    }
+
+    public List<Restaurant> findByTerm(@Nullable String term) {
+        if (Strings.isNullOrEmpty(term))
+            return findAll();
+        else
+            return findByFilter(or(
+                        regex("name", term),
+                        regex("description", term)
+                    ));
+    }
 
     @Override
     protected Optional<Document> find(Restaurant restaurant) {
@@ -48,7 +64,7 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                             BigDecimal.valueOf(doc.getDouble("rating")),
                             doc.getDate("date").toInstant().atZone(ZoneId.systemDefault())
                         ))
-                        .collect(Collectors.toList()));
+                        .toList());
     }
 
     @Override
@@ -66,7 +82,7 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                             .append("content", comment.getContent())
                             .append("rating", comment.getRating().doubleValue())
                             .append("date", comment.getDate().toInstant()))
-                    .collect(Collectors.toList()));
+                .toList());
 
         if (!Strings.isNullOrEmpty(restaurant.getId()))
             document.append("_id", new ObjectId(restaurant.getId()));

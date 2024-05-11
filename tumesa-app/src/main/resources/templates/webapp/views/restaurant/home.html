@@ -3,7 +3,12 @@
 <th:template th:fragment="home">
     <script type="application/javascript">
         let homeComponent = Vue.defineComponent({
-            template: '#home-template'
+            template: '#home-template',
+            data() {
+                return {
+                    terminoBusqueda: ''
+                }
+            },
         });
     </script>
 
@@ -23,17 +28,19 @@
                                         <h4>Busca tu restaurante</h4>
                                         <p class="f-m-light mt-1 mb-2">Encuentra el restaurante perfecto y ahorra tiempo gestionando tus reservas.</p>
 
-                                        <form class="form-wizard" action="#" method="POST">
+                                        <form class="form-wizard" action="#">
                                             <div class="tab">
                                                 <div class="row g-3">
                                                     <div class="col-sm-12">
-                                                        <input class="form-control" type="text" placeholder="Introduzca un nombre..." required="required">
+                                                        <input class="form-control" type="text" placeholder="Introduzca un nombre..." required="required" v-model="terminoBusqueda">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div>
                                                 <div class="text-end pt-3">
-                                                    <button class="btn btn-primary" type="button">Buscar</button>
+                                                    <button class="btn btn-primary" @click.prevent="$router.push({ path: '/restaurantes', query: { term: terminoBusqueda } })">
+                                                        Buscar
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>

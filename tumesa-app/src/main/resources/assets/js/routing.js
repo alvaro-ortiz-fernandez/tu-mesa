@@ -66,7 +66,7 @@ const router = VueRouter.createRouter({
                 ]
             }
         } },
-        { path: '/restaurante', component: detailComponent, meta: {
+        { path: '/restaurante/:name', component: detailComponent, meta: {
             private: false,
             breadcrumb: {
                 show: true,
