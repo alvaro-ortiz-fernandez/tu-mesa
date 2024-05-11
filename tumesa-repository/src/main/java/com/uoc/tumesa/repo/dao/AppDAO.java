@@ -1,14 +1,19 @@
 package com.uoc.tumesa.repo.dao;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.lang.Nullable;
 import com.uoc.tumesa.repo.model.RepoEntity;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.*;
@@ -31,6 +36,10 @@ public abstract class AppDAO<T extends RepoEntity> {
                 .first());
     }
 
+    public List<T> findAll() {
+        return toList(collection.find());
+    }
+
     public T save(T entity) {
         return find(entity)
                 .map(currentDoc -> update(currentDoc, entity))
@@ -47,7 +56,6 @@ public abstract class AppDAO<T extends RepoEntity> {
     }
 
     protected T create(T entity) {
-
         InsertOneResult result = collection.insertOne(toDocument(entity));
         if (result.getInsertedId() != null)
             entity.setId(result.getInsertedId().asObjectId().getValue().toString());
@@ -68,9 +76,24 @@ public abstract class AppDAO<T extends RepoEntity> {
         return entity;
     }
 
-    public Optional<T> find(@Nullable Document document) {
+    protected Optional<T> find(@Nullable Document document) {
         return Optional.ofNullable(document)
                 .map(this::fromDocument);
+    }
+
+    protected List<T> findByFilter(Bson filter) {
+        return toList(collection.find(filter));
+    }
+
+    protected List<T> toList(FindIterable<Document> queryResult) {
+        List<T> result = Lists.newArrayList();
+
+        try (MongoCursor<Document> cursor = queryResult.cursor()) {
+            while (cursor.hasNext())
+                result.add(fromDocument(cursor.next()));
+        }
+
+        return result;
     }
 
     protected abstract Optional<Document> find(T entity);

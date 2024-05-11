@@ -4,6 +4,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.uoc.tumesa.properties.ConfigManager;
+import com.uoc.tumesa.repo.dao.AppDAO;
+import com.uoc.tumesa.repo.dao.RestaurantsDAO;
 import com.uoc.tumesa.repo.dao.UsersDAO;
 
 /**
@@ -20,15 +22,15 @@ public class Repository {
 
         // Y obtenemos la base de datos
         this.db = client.getDatabase(config.getProperty("repository.db"));
-
-        System.out.println("OK");
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends UsersDAO> T getDAO(Class<T> daoClass) {
+    public <T extends AppDAO<?>> T getDAO(Class<T> daoClass) {
 
         if (UsersDAO.class.equals(daoClass))
             return (T) new UsersDAO(db);
+        else if (RestaurantsDAO.class.equals(daoClass))
+            return (T) new RestaurantsDAO(db);
         else
             throw new IllegalStateException(String.format("DAO %s no registrado.", daoClass.getName()));
     }
