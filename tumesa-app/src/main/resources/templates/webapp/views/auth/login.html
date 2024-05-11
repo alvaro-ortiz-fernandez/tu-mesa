@@ -17,7 +17,7 @@
                         NotificationService.showLoading("Validando sus credenciales");
 
                         setTimeout(() => {
-                            axios.post('/login', {
+                            axios.post('/auth/login', {
                                 user: this.user,
                                 password: this.pass
                             })

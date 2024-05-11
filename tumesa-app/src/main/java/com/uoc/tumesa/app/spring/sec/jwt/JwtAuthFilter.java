@@ -21,8 +21,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final AntPathRequestMatcher[] requestMatchers = {
             new AntPathRequestMatcher("/"),
-            new AntPathRequestMatcher("/login", "POST"),
-            new AntPathRequestMatcher("/registro", "POST"),
+            new AntPathRequestMatcher("/auth/**", "POST"),
             new AntPathRequestMatcher("/css/**"),
             new AntPathRequestMatcher("/js/**"),
             new AntPathRequestMatcher("/images/**"),

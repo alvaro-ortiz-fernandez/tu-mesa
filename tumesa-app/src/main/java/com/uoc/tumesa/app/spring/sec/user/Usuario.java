@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Representa a un usuario en la aplicación.
@@ -30,7 +29,7 @@ public record Usuario(String usuario, String password, String jwtToken, List<Rol
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return getRoles().stream()
 				.map(RolUsuario::getGrantedAuthority)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Override

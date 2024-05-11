@@ -18,7 +18,7 @@
                         NotificationService.showLoading("Registrando su cuenta");
 
                         setTimeout(() => {
-                            axios.post('/registro', {
+                            axios.post('/auth/registro', {
                                 user: this.user,
                                 email: this.email,
                                 password: this.pass
