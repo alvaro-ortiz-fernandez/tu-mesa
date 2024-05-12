@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -64,7 +65,7 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                             BigDecimal.valueOf(doc.getDouble("rating")),
                             doc.getDate("date").toInstant().atZone(ZoneId.systemDefault())
                         ))
-                        .toList());
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -82,7 +83,7 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                             .append("content", comment.getContent())
                             .append("rating", comment.getRating().doubleValue())
                             .append("date", comment.getDate().toInstant()))
-                .toList());
+                .collect(Collectors.toList()));
 
         if (!Strings.isNullOrEmpty(restaurant.getId()))
             document.append("_id", new ObjectId(restaurant.getId()));
