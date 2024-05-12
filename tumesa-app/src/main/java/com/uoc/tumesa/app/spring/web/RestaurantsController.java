@@ -36,6 +36,7 @@ public class RestaurantsController {
             logger.info("Obteniendo restaurantes con filtro [{}]...", filtro);
             List<RestaurantModel> restaurants = repository.getDAO(RestaurantsDAO.class)
                     .findByTerm(filtro.termino()).stream()
+                    .filter(res -> filtro.puntuacion() == null || res.getRating().compareTo(filtro.puntuacion()) >= 0)
                     .map(RestaurantModel::new)
                     .collect(Collectors.toList());
 
