@@ -6,13 +6,165 @@
             template: '#detail-template',
             data() {
                 return {
+                    restaurant: {},
+                    comentario: '',
+                    hoverRating: 0,
+                    selectedRating: 0,
+                    loading: true
+                }
+            },
+            created() {
+                if (this.$route.params?.name)
+                    this.restaurant = this.buscar(this.$route.params.name);
+                else
+                    NotificationService.showWarningToast();
+            },
+            methods: {
+                buscar(nombre) {
+                    this.loading = true;
+
+                    setTimeout(() => {
+                        axios.post('/restaurantes/restaurante', {
+                            nombre: nombre
+                        })
+                        .then((response) => {
+                            this.restaurant = response.data;
+                            this.loading = false;
+                        })
+                        .catch((error) => {
+                            console.error("Se produjo un error al buscar el restaurante: ", error);
+                            NotificationService.showWarningToast();
+                            this.loading = false;
+                        });
+                    }, 200);
+                },
+                nuevoComentario() {
+                    if (document.getElementById("form-comentario").reportValidity()) {
+                        NotificationService.showLoading("Enviando comentario");
+
+                        setTimeout(() => {
+                            axios.post('/restaurantes/nuevo-comentario', {
+                                restaurante: this.restaurant.name,
+                                usuario: this.$root.user,
+                                comentario: this.comentario,
+                                puntuacion: this.selectedRating
+                            })
+                            .then((response) => {
+                                NotificationService.hideLoading();
+                                this.restaurant = response.data;
+                                NotificationService.showSuccessToast("Comentario creado correctamente");
+                            })
+                            .catch((error) => {
+                                console.error("Se produjo un error al crear el comentario: ", error);
+                                NotificationService.hideLoading();
+                                NotificationService.showWarningToast();
+                            });
+                        }, 500);
+                    }
                 }
             }
         });
     </script>
 
     <script type="text/x-template" id="detail-template">
-        <h1>Soy el detail</h1>
+        <section class="page-container">
+            <div class="row" v-if="loading">
+                <!-- Aviso de carga -->
+                <div class="col-xs-12">
+                    <div class="d-flex justify-content-center">
+                        <div class="app-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalle del restaurante -->
+            <div v-else class="user-profile social-app-profile">
+                <!-- Cabecera -->
+                <div class="row">
+                    <div class="col-sm-12 box-col-12">
+                        <div class="card hovercard text-center">
+                            <div class="cardheader socialheader"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Información -->
+                    <div class="col-md-7 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>{{ restaurant.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opiniones -->
+                    <div class="col-md-5 col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="mb-4">Opiniones</h4>
+
+                                <!-- Comentarios -->
+                                <div v-for="(comment, index) in restaurant.comments" :key="comment.date">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <!-- Avatar -->
+                                        <div class="flex-shrink-0">
+                                            <img class="img-50 img-fluid m-r-20 rounded-circle" src="/images/user/user.png" alt="User">
+                                        </div>
+                                        <!-- Nombre del usuario y fecha del comentario -->
+                                        <div class="flex-shrink-0">
+                                            <p class="mb-0"><strong>{{ comment.user }}</strong></p>
+                                            <small class="text-secondary">{{ $filters.timestampToDate(comment.date) }}</small>
+                                        </div>
+                                        <!-- Puntuación -->
+                                        <div class="flex-grow-1 text-end">
+                                            <h5 class="d-inline">{{ comment.rating }}</h5> <span>/ 5</span>
+                                        </div>
+                                    </div>
+
+                                    <p>{{ comment.content }}</p>
+
+                                    <hr v-if="index !== (restaurant.comments.length - 1)" />
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <!-- Nuevo comentario -->
+                                <form v-if="$root.user" id="form-comentario" class="form-wizard" action="#">
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" placeholder="Introduzca un comentario..." required="required" v-model="comentario">
+                                        <div class="rating input-group-text">
+                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 1 || hoverRating >= 1 }"
+                                               @click="selectedRating = 1" @mouseover="hoverRating = 1" @mouseleave="hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 2 || hoverRating >= 2 }"
+                                               @click="selectedRating = 2" @mouseover="hoverRating = 2" @mouseleave="hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 3 || hoverRating >= 3 }"
+                                               @click="selectedRating = 3" @mouseover="hoverRating = 3" @mouseleave="hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 4 || hoverRating >= 4 }"
+                                               @click="selectedRating = 4" @mouseover="hoverRating = 4" @mouseleave="hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 5 || hoverRating >= 5 }"
+                                               @click="selectedRating = 5" @mouseover="hoverRating = 5" @mouseleave="hoverRating = 0"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end pt-3">
+                                        <button class="btn btn-primary" @click.prevent="nuevoComentario">Enviar</button>
+                                    </div>
+                                </form>
+
+                                <!-- Aviso de login para publicar un comentario -->
+                                <div v-else class="text-center">
+                                    <p>Inicie sesión para publicar un comentario</p>
+                                    <a class="btn btn-primary" @click.prevent="$router.push({ path: '/login' })">
+                                        <i class="fa fa-sign-in me-2"></i>
+                                        <span>Iniciar sesión</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </script>
 </th:template>
 </html>

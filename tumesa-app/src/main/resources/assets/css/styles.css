@@ -26,8 +26,12 @@ body {
 }
 
 /*///////// Puntuaciones /////////*/
-.rating .fa-star, .rating .fa-star-half {
-    color: #ffe859;
+.rating .fa-star,
+.rating .fa-star-half {
+    color: #ffa800;
+}
+.rating.input-group-text .fa-star:not(.selected) {
+    color: #d2d2d2;
 }
 
 /*///////// Spinner de carga /////////*/

@@ -40,7 +40,9 @@ let app = {
 };
 
 addEventListener("DOMContentLoaded", (event) => {
-    Vue.createApp(app)
+    const vueApp = Vue.createApp(app);
+
+    vueApp
        .use(router)
            .component('app-header', appHeaderComponent)
            .component('app-breadcrumb', appBreadcrumbComponent)
@@ -52,6 +54,30 @@ addEventListener("DOMContentLoaded", (event) => {
            .component('home', homeComponent)
            .component('list', listComponent)
            .component('detail', detailComponent)
-           .component('reservation', reservationComponent)
+           .component('reservation', reservationComponent);
+
+    vueApp.config.globalProperties.$filters = {
+        timestampToDate(timestamp) {
+            if (!timestamp)
+                return ''
+
+            // Multiplicamos por 1000 para convertir segundos a milisegundos
+            var fecha = new Date(timestamp * 1000);
+
+            // Obtener los componentes de la fecha
+            var dia = fecha.getDate();
+            var mes = fecha.getMonth() + 1; // Los meses en JS van de 0 a 11
+            var año = fecha.getFullYear();
+
+            // Obtenemos el nombre del mes
+            var nombresMeses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            var nombreMes = nombresMeses[mes - 1];
+
+            // Lo convertimos a cadena
+           return dia + " de " + nombreMes + " de " + año;
+        }
+    }
+
+    vueApp
        .mount('#app');
 });

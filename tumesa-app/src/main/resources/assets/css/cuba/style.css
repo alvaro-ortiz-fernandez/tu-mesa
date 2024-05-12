@@ -7435,6 +7435,7 @@ btn-group .dropdown-wrapper .input-group .input-group-text {
 .main-custom-form .dropdown-menu {
   z-index: 3;
 }
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback),
 .main-custom-form .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
