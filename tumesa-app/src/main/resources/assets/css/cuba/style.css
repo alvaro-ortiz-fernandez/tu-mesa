@@ -30982,7 +30982,7 @@ html {
   margin: 30px 0;
 }
 .user-profile .hovercard .cardheader {
-  background: url(/images/other-images/bg-profile.png);
+  background: url(/images/restaurant/27.jpg);
   background-size: cover;
   background-position: 10%;
   height: 470px;
@@ -37872,7 +37872,11 @@ a {
 .page-wrapper .page-body-wrapper .page-container {
   max-width: 1350px;
   margin: auto;
-  padding: 0;
+}
+@media (min-width: 1408px) {
+  .page-wrapper .page-body-wrapper .page-container {
+    padding: 0;
+  }
 }
 .page-wrapper .page-body-wrapper .page-body:before {
   animation: fadeIn 0.5s ease-in-out;
