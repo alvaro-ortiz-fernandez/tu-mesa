@@ -5,6 +5,9 @@ body {
 .w-100 {
     width: 100%;
 }
+.underline {
+    text-decoration: underline;
+}
 
 /*///////// Home /////////*/
 .home-sections .home,
@@ -47,4 +50,9 @@ body {
     border-style: solid;
     border-radius: 100%;
     border-color: #7066e0 rgba(0, 0, 0, 0) #7066e0 rgba(0, 0, 0, 0);
+}
+
+/*///////// Tabs /////////*/
+.nav-tabs .nav-item {
+    cursor: pointer;
 }

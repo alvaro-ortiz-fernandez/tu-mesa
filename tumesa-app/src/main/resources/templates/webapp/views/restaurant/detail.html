@@ -7,9 +7,16 @@
             data() {
                 return {
                     restaurant: {},
-                    comentario: '',
-                    hoverRating: 0,
-                    selectedRating: 0,
+                    tabs: {
+                        desc: true,
+                        fotos: false,
+                        reserva: false,
+                    },
+                    nuevoComentario: {
+                        contenido: '',
+                        hoverRating: 0,
+                        selectedRating: 0,
+                    },
                     loading: true
                 }
             },
@@ -38,7 +45,7 @@
                         });
                     }, 200);
                 },
-                nuevoComentario() {
+                enviarComentario() {
                     if (document.getElementById("form-comentario").reportValidity()) {
                         NotificationService.showLoading("Enviando comentario");
 
@@ -46,8 +53,8 @@
                             axios.post('/restaurantes/nuevo-comentario', {
                                 restaurante: this.restaurant.name,
                                 usuario: this.$root.user,
-                                comentario: this.comentario,
-                                puntuacion: this.selectedRating
+                                comentario: this.nuevoComentario.contenido,
+                                puntuacion: this.nuevoComentario.selectedRating
                             })
                             .then((response) => {
                                 NotificationService.hideLoading();
@@ -83,7 +90,7 @@
                 <div class="row">
                     <div class="col-sm-12 box-col-12">
                         <div class="card hovercard text-center">
-                            <div class="cardheader socialheader"></div>
+                            <div class="cardheader" :style="'background: url(/images/restaurant/' + restaurant.images.main + '.jpg); background-size: cover; background-position: 10%;'"></div>
                         </div>
                     </div>
                 </div>
@@ -94,6 +101,60 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>{{ restaurant.name }}</h5>
+
+                                <!-- Pestañas -->
+                                <ul class="nav nav-tabs border-tab mt-3" id="bottom-tab" role="tablist">
+                                    <!-- Descripción -->
+                                    <li class="nav-item pt-2" @click="tabs.fotos = false; tabs.desc = true; tabs.reserva = false;">
+                                        <a class="nav-link nav-border txt-primary tab-primary" role="tab" :class="{ 'active': tabs.desc }">
+                                            <i class="fa fa-info-circle"> </i>Descripción
+                                        </a>
+                                    </li>
+                                    <!-- Fotos -->
+                                    <li class="nav-item pt-2" @click="tabs.fotos = true; tabs.desc = false; tabs.reserva = false;">
+                                        <a class="nav-link nav-border txt-primary tab-primary" role="tab" :class="{ 'active': tabs.fotos }">
+                                            <i class="fa fa-image"> </i>Fotos
+                                        </a>
+                                    </li>
+                                    <!-- Reserva -->
+                                    <li class="nav-item pt-2" @click="tabs.fotos = false; tabs.desc = false; tabs.reserva = true;">
+                                        <a class="nav-link nav-border txt-primary tab-primary" role="tab" :class="{ 'active': tabs.reserva }">
+                                            <i class="fa fa-calendar-o"></i>Reserva
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!-- Descripción -->
+                                    <div class="tab-pane fade" role="tabpanel" :class="{ 'show active': tabs.desc }">
+                                        <div class="d-flex align-items-center mt-4 mb-4">
+                                            <!-- Dirección -->
+                                            <a :href="'https://www.google.com/maps/search/?api=1&query=' + restaurant.address.replaceAll(' ', '+')" target="_blank" class="flex-shrink-0">
+                                                <div class="d-flex align-items-center map-link">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="img-30 img-fluid m-r-10" src="/images/other-images/google-maps.png" alt="maps">
+                                                    </div>
+                                                    <div class="flex-shrink-0 mt-1">
+                                                        <p class="text-dark underline pe-2">{{ restaurant.address }}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <!-- Puntuación -->
+                                            <div class="flex-grow-1 text-end">
+                                                <h5 class="d-inline">{{ restaurant.rating }}</h5> <span>/ 5</span>
+                                            </div>
+                                        </div>
+
+                                        <p>{{ restaurant.description }}</p>
+                                    </div>
+                                    <!-- Fotos -->
+                                    <div class="tab-pane fade" role="tabpanel" :class="{ 'show active': tabs.fotos }">
+                                        <p>Tab fotos</p>
+                                    </div>
+                                    <!-- Reserva -->
+                                    <div class="tab-pane fade" role="tabpanel" :class="{ 'show active': tabs.reserva }">
+                                        <p>Tab reserva</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,29 +192,29 @@
                                 <!-- Nuevo comentario -->
                                 <form v-if="$root.user" id="form-comentario" class="form-wizard" action="#">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Introduzca un comentario..." required="required" v-model="comentario">
+                                        <input class="form-control" type="text" placeholder="Introduzca un comentario..." required="required" v-model="nuevoComentario.contenido">
                                         <div class="rating input-group-text">
-                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 1 || hoverRating >= 1 }"
-                                               @click="selectedRating = 1" @mouseover="hoverRating = 1" @mouseleave="hoverRating = 0"></i>
-                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 2 || hoverRating >= 2 }"
-                                               @click="selectedRating = 2" @mouseover="hoverRating = 2" @mouseleave="hoverRating = 0"></i>
-                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 3 || hoverRating >= 3 }"
-                                               @click="selectedRating = 3" @mouseover="hoverRating = 3" @mouseleave="hoverRating = 0"></i>
-                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 4 || hoverRating >= 4 }"
-                                               @click="selectedRating = 4" @mouseover="hoverRating = 4" @mouseleave="hoverRating = 0"></i>
-                                            <i class="fa fa-star" :class="{ 'selected': selectedRating >= 5 || hoverRating >= 5 }"
-                                               @click="selectedRating = 5" @mouseover="hoverRating = 5" @mouseleave="hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 1 || nuevoComentario.hoverRating >= 1 }"
+                                               @click="nuevoComentario.selectedRating = 1" @mouseover="nuevoComentario.hoverRating = 1" @mouseleave="nuevoComentario.hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 2 || nuevoComentario.hoverRating >= 2 }"
+                                               @click="nuevoComentario.selectedRating = 2" @mouseover="nuevoComentario.hoverRating = 2" @mouseleave="nuevoComentario.hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 3 || nuevoComentario.hoverRating >= 3 }"
+                                               @click="nuevoComentario.selectedRating = 3" @mouseover="nuevoComentario.hoverRating = 3" @mouseleave="nuevoComentario.hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 4 || nuevoComentario.hoverRating >= 4 }"
+                                               @click="nuevoComentario.selectedRating = 4" @mouseover="nuevoComentario.hoverRating = 4" @mouseleave="nuevoComentario.hoverRating = 0"></i>
+                                            <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 5 || nuevoComentario.hoverRating >= 5 }"
+                                               @click="nuevoComentario.selectedRating = 5" @mouseover="nuevoComentario.hoverRating = 5" @mouseleave="nuevoComentario.hoverRating = 0"></i>
                                         </div>
                                     </div>
 
                                     <div class="text-end pt-3">
-                                        <button class="btn btn-primary" @click.prevent="nuevoComentario">Enviar</button>
+                                        <button class="btn btn-primary" @click.prevent="enviarComentario">Enviar</button>
                                     </div>
                                 </form>
 
-                                <!-- Aviso de login para publicar un comentario -->
+                                <!-- Aviso de login para publicar una reseña -->
                                 <div v-else class="text-center">
-                                    <p>Inicie sesión para publicar un comentario</p>
+                                    <p>Inicie sesión para publicar una reseña</p>
                                     <a class="btn btn-primary" @click.prevent="$router.push({ path: '/login' })">
                                         <i class="fa fa-sign-in me-2"></i>
                                         <span>Iniciar sesión</span>
