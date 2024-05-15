@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/auth")
-public class LoginController {
+public class AuthenticationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     private UsuarioDetailsService userDetailsService;
