@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Clase de configuración de Spring Boot, para configurar la securización de la aplicación.
+ * */
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig {

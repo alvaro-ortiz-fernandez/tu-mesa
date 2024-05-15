@@ -3,6 +3,9 @@ package com.uoc.tumesa.app.spring.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Controlador principal de la aplicación, para devolver al frontend el HTML SPA (Single Page Application).
+ * */
 @Controller
 public class MainController {
 

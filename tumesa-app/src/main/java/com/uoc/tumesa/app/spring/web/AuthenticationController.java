@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador con los endpoints relativos a autenticaciones.
+ * */
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthenticationController {

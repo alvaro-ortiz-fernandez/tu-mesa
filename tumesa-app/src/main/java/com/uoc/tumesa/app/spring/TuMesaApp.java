@@ -5,6 +5,9 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Clase principal de la aplicación, usada por Spring Boot para arrancar el programa.
+ * */
 @SpringBootApplication
 public class TuMesaApp {
 

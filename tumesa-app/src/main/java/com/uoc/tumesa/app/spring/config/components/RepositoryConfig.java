@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Clase de configuración de Spring Boot, con los beans encargados de la conexión a BBDD.
+ * */
 @Configuration
 public class RepositoryConfig {
 

@@ -8,12 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Clase de configuración de Spring Boot, con la configuración relativa a regursos servidos al frontend.
+ * */
 @EnableWebMvc
 @Configuration
 public class SpringWebConfig implements WebMvcConfigurer {
 
     @Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Mapeamos recursos estáticos a URLs
 		registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/assets/css/")
                 .setCacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS));

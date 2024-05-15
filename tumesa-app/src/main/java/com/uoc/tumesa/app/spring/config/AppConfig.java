@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Clase de configuración de Spring Boot, para indicar los packages que contienen otras clases de configuración.
+ * */
 @Configuration
 @EnableWebMvc
 @ComponentScan({

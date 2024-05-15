@@ -14,6 +14,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * Filtro de Spring Boot invocado al inicio de cada petición para validar (sólo en las peticiones que requieran autenticación)
+ * que se haya indicado un token JWT válido (token obtenido en el momento de autenticarse).
+ * */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 

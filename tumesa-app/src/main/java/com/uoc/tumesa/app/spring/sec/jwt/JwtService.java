@@ -14,12 +14,15 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Servicio encargado de la validación y generación de tokens JWT de autenticación.
+ * */
 @Component
 public class JwtService {
 
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
-    public String generateToken(String username){
+    public String generateToken(String username) {
         Map<String, Object> claims = Maps.newHashMap();
         return createToken(claims, username);
     }

@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador con los endpoints relativos a consulta, visualización y edición de restaurantes.
+ * */
 @RestController
 @RequestMapping(value = "/restaurantes", method = { RequestMethod.POST })
 public class RestaurantsController {
