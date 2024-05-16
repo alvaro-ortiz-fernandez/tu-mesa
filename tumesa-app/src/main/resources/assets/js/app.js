@@ -50,11 +50,9 @@ addEventListener("DOMContentLoaded", (event) => {
            .component('login', loginComponent)
            .component('signup', signupComponent)
            .component('user-profile', userProfileComponent)
-           .component('admin-profile', adminProfileComponent)
            .component('home', homeComponent)
            .component('list', listComponent)
-           .component('detail', detailComponent)
-           .component('reservation', reservationComponent);
+           .component('detail', detailComponent);
 
     vueApp.config.globalProperties.$filters = {
         timestampToDate(timestamp) {
