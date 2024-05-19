@@ -28392,7 +28392,7 @@ ul.dot-group li {
     3.29 Login CSS Start
 ==========================**/
 .login-container {
-  background: url("/images/login/login_bg.jpg");
+  background: url("/images/auth/auth-bg.jpg");
   background-position: center;
 }
 .login-card {
