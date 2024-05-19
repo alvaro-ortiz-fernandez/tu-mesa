@@ -63,6 +63,38 @@ addEventListener("DOMContentLoaded", (event) => {
             var fecha = new Date(timestamp * 1000);
 
             // Obtener los componentes de la fecha
+            var dia = String(fecha.getDate()).padStart(2, '0');
+            var mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses en JS van de 0 a 11
+            var año = String(fecha.getFullYear()).padStart(2, '0');
+
+            // Lo convertimos a cadena
+           return año + "-" + mes + "-" + dia;
+        },
+        timestampToDateTime(timestamp) {
+            if (!timestamp)
+                return ''
+
+            // Multiplicamos por 1000 para convertir segundos a milisegundos
+            var fecha = new Date(timestamp * 1000);
+
+            // Obtener los componentes de la fecha
+            var minuto = String(fecha.getMinutes()).padStart(2, '0');
+            var hora = String(fecha.getHours()).padStart(2, '0');
+            var dia = String(fecha.getDate()).padStart(2, '0');
+            var mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses en JS van de 0 a 11
+            var año = String(fecha.getFullYear()).padStart(2, '0');
+
+            // Lo convertimos a cadena
+           return año + "-" + mes + "-" + dia + " " + hora + ":" + minuto;
+        },
+        timestampToDateStr(timestamp) {
+            if (!timestamp)
+                return ''
+
+            // Multiplicamos por 1000 para convertir segundos a milisegundos
+            var fecha = new Date(timestamp * 1000);
+
+            // Obtener los componentes de la fecha
             var dia = fecha.getDate();
             var mes = fecha.getMonth() + 1; // Los meses en JS van de 0 a 11
             var año = fecha.getFullYear();

@@ -5,6 +5,7 @@ import com.mongodb.client.MongoDatabase;
 import com.uoc.tumesa.repo.model.Restaurant;
 import com.uoc.tumesa.repo.model.Restaurant.Comment;
 import com.uoc.tumesa.repo.model.Restaurant.Images;
+import com.uoc.tumesa.repo.model.Restaurant.Reservation;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -58,12 +59,18 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                     document.get("images", Document.class).getString("main"),
                     document.get("images", Document.class).get("photos", java.util.ArrayList.class)
                 ),
-                document.getList("comments", Document.class).stream()
+                getList(document, "comments").stream()
                         .map(doc -> new Comment(
                             doc.getString("user"),
                             doc.getString("content"),
                             BigDecimal.valueOf(doc.getDouble("rating")),
                             doc.getDate("date").toInstant().atZone(ZoneId.systemDefault())
+                        ))
+                        .collect(Collectors.toList()),
+                getList(document, "reservations").stream()
+                        .map(doc -> new Reservation(
+                                doc.getString("user"),
+                                doc.getDate("date").toInstant().atZone(ZoneId.systemDefault())
                         ))
                         .collect(Collectors.toList()));
     }
@@ -83,7 +90,12 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                             .append("content", comment.getContent())
                             .append("rating", comment.getRating().doubleValue())
                             .append("date", comment.getDate().toInstant()))
-                .collect(Collectors.toList()));
+                    .collect(Collectors.toList()))
+                .append("reservations", restaurant.getReservations().stream()
+                    .map(reservation ->
+                        new Document("user", reservation.getUser())
+                            .append("date", reservation.getDate().toInstant()))
+                    .collect(Collectors.toList()));
 
         if (!Strings.isNullOrEmpty(restaurant.getId()))
             document.append("_id", new ObjectId(restaurant.getId()));

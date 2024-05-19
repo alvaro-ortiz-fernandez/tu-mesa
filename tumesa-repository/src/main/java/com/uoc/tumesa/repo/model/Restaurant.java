@@ -14,14 +14,11 @@ public class Restaurant extends RepoEntity {
     private String address;
     private Images images;
     private List<Comment> comments;
+    private List<Reservation> reservations;
 
-
-    public Restaurant(String name, String description, String address, Images images, List<Comment> comments) {
-        this(null, name, description, address, images, comments);
-    }
 
     public Restaurant(@Nullable String id, String name, String description,
-            String address, Images images, List<Comment> comments) {
+            String address, Images images, List<Comment> comments, List<Reservation> reservations) {
 
         setId(id);
         this.name = name;
@@ -29,6 +26,7 @@ public class Restaurant extends RepoEntity {
         this.address = address;
         this.images = images;
         this.comments = comments;
+        this.reservations = reservations;
     }
 
 
@@ -61,6 +59,12 @@ public class Restaurant extends RepoEntity {
     }
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     public BigDecimal getRating() {
@@ -143,6 +147,30 @@ public class Restaurant extends RepoEntity {
         }
         public void setRating(BigDecimal rating) {
             this.rating = rating;
+        }
+        public ZonedDateTime getDate() {
+            return date;
+        }
+        public void setDate(ZonedDateTime date) {
+            this.date = date;
+        }
+    }
+
+    public static class Reservation {
+
+        private String user;
+        private ZonedDateTime date;
+
+        public Reservation(String user, ZonedDateTime date) {
+            this.user = user;
+            this.date = date;
+        }
+
+        public String getUser() {
+            return user;
+        }
+        public void setUser(String user) {
+            this.user = user;
         }
         public ZonedDateTime getDate() {
             return date;

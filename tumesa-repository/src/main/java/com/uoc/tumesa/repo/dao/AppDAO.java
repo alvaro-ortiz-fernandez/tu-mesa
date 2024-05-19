@@ -96,6 +96,11 @@ public abstract class AppDAO<T extends RepoEntity> {
         return result;
     }
 
+    protected List<Document> getList(Document document, String field) {
+        List<Document> list = document.getList(field, Document.class);
+        return (list != null) ? list : Lists.newArrayList();
+    }
+
     protected abstract Optional<Document> find(T entity);
 
     protected abstract T fromDocument(Document document);

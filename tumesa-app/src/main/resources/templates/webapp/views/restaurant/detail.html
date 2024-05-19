@@ -17,6 +17,7 @@
                         hoverRating: 0,
                         selectedRating: 0,
                     },
+                    nuevaReserva: undefined,
                     loading: true
                 }
             },
@@ -25,6 +26,15 @@
                     this.restaurant = this.buscar(this.$route.params.name);
                 else
                     NotificationService.showWarningToast();
+            },
+            computed: {
+                reservas() {
+                    if (!this.$root.user || !this.restaurant.reservations)
+                        return [];
+
+                    return this.restaurant.reservations
+                        .filter((r) => r.user === this.$root.user);
+                }
             },
             methods: {
                 buscar(nombre) {
@@ -37,7 +47,7 @@
                         .then((response) => {
                             this.restaurant = response.data;
                             this.initCarousel();
-                            this.initDatepicker();
+                            this.initDatepicker(response.data);
                             this.loading = false;
                         })
                         .catch((error) => {
@@ -61,10 +71,34 @@
                             .then((response) => {
                                 NotificationService.hideLoading();
                                 this.restaurant = response.data;
-                                NotificationService.showSuccessToast("Comentario creado correctamente");
+                                NotificationService.showSuccessToast("Reseña creada correctamente");
                             })
                             .catch((error) => {
-                                console.error("Se produjo un error al crear el comentario: ", error);
+                                console.error("Se produjo un error al crear la reseña: ", error);
+                                NotificationService.hideLoading();
+                                NotificationService.showWarningToast();
+                            });
+                        }, 500);
+                    }
+                },
+                crearReserva() {
+                    if (document.getElementById("form-reserva").reportValidity()) {
+                        NotificationService.showLoading("Solicitando reserva");
+
+                        setTimeout(() => {
+                            axios.post('/restaurantes/nueva-reserva', {
+                                restaurante: this.restaurant.name,
+                                usuario: this.$root.user,
+                                fecha: this.nuevaReserva
+                            })
+                            .then((response) => {
+                                NotificationService.hideLoading();
+                                this.restaurant = response.data;
+                                this.initDatepicker(response.data);
+                                NotificationService.showSuccessToast("Reserva creada correctamente");
+                            })
+                            .catch((error) => {
+                                console.error("Se produjo un error al crear la reserva: ", error);
                                 NotificationService.hideLoading();
                                 NotificationService.showWarningToast();
                             });
@@ -107,13 +141,13 @@
                         });
                     }, 500);
                 },
-                initDatepicker() {
+                initDatepicker(restaurant) {
                     setTimeout(() => {
                         flatpickr("#reserva-time-picker", {
                             enableTime: true,
                             minTime: "09:00",
                             maxTime: "22:00",
-                            disable: ["2024-05-20", "2024-05-24"]
+                            disable: restaurant?.reservations?.map(reservation => this.$root.$filters.timestampToDate(reservation.date))
                         });
                     }, 500);
                 }
@@ -204,12 +238,42 @@
                                     </div>
                                     <!-- Reserva -->
                                     <div class="tab-pane fade" role="tabpanel" :class="{ 'show active': tabs.reserva }">
-                                        <div class="row">
-                                            <label class="col-xxl-3 box-col-12 text-start">Seleccione la fecha y hora de su reserva</label>
-                                            <div class="col-xxl-9 box-col-12">
-                                                <div class="input-group">
-                                                    <input class="form-control" id="reserva-time-picker" type="time">
+                                        <!-- Gestión de reservas -->
+                                        <div v-if="$root.user">
+                                            <!-- Nueva reserva -->
+                                            <h6 class="mb-3">Solicitar una nueva reserva</h6>
+                                            <div class="row datepicker-form">
+                                                <label class="col-xxl-3 box-col-12 text-start mb-0">Seleccione la fecha y hora de su reserva</label>
+                                                <div class="col-xxl-9 box-col-12">
+                                                    <form id="form-reserva" class="form-wizard" action="#">
+                                                        <div class="input-group">
+                                                            <input class="form-control" id="reserva-time-picker" type="time" required="required" v-model="nuevaReserva">
+                                                        </div>
+                                                    </form>
                                                 </div>
+                                                <div class="text-end pt-3">
+                                                    <button class="btn btn-primary" :class="{ 'disabled': !nuevaReserva }" :disabled="!nuevaReserva" @click.prevent="crearReserva">Enviar</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Lista de reservas -->
+                                            <h6 class="mb-3">Sus reservas</h6>
+                                            <p v-if="reservas.length === 0">No posee ninguna reserva activa en este restaurante.</p>
+                                            <div v-else v-for="(reserva, index) in reservas" :key="reserva.date" class="input-group" :class="{ 'mb-3': index !== (reservas.length - 1) }">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-calendar ps-4 pe-4"></i>
+                                                </div>
+                                                <input class="form-control disabled" type="text" disabled="disabled" :value="$filters.timestampToDateTime(reserva.date)">
+                                            </div>
+                                        </div>
+                                        <!-- Aviso de login para gestionar las reservas -->
+                                        <div v-else class="row">
+                                            <div class="col-xs-12 text-center">
+                                                <p>Inicie sesión para gestionar sus reservas</p>
+                                                <a class="btn btn-primary" @click.prevent="$router.push({ path: '/login' })">
+                                                    <i class="fa fa-sign-in me-2"></i>
+                                                    <span>Iniciar sesión</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -234,7 +298,7 @@
                                         <!-- Nombre del usuario y fecha de la reseña -->
                                         <div class="flex-shrink-0">
                                             <p class="mb-0"><strong>{{ comment.user }}</strong></p>
-                                            <small class="text-secondary">{{ $filters.timestampToDate(comment.date) }}</small>
+                                            <small class="text-secondary">{{ $filters.timestampToDateStr(comment.date) }}</small>
                                         </div>
                                         <!-- Puntuación -->
                                         <div class="flex-grow-1 text-end">

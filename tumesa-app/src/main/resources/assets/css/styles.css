@@ -56,3 +56,10 @@ body {
 .nav-tabs .nav-item {
     cursor: pointer;
 }
+
+/*///////// Datepicker /////////*/
+.datepicker-form label {
+    line-height: 20px;
+}
+
+

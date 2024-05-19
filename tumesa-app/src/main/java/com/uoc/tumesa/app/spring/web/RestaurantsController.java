@@ -1,12 +1,14 @@
 package com.uoc.tumesa.app.spring.web;
 
 import com.uoc.tumesa.app.model.FiltroBusquedaRestaurantes;
+import com.uoc.tumesa.app.model.NuevaReserva;
 import com.uoc.tumesa.app.model.NuevoComentario;
 import com.uoc.tumesa.app.model.RestaurantModel;
 import com.uoc.tumesa.repo.Repository;
 import com.uoc.tumesa.repo.dao.RestaurantsDAO;
 import com.uoc.tumesa.repo.model.Restaurant;
 import com.uoc.tumesa.repo.model.Restaurant.Comment;
+import com.uoc.tumesa.repo.model.Restaurant.Reservation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,13 +89,36 @@ public class RestaurantsController {
 
             restaurant.get().getComments().add(new Comment(comentario.usuario(), comentario.comentario(),
                     comentario.puntuacion(), ZonedDateTime.now()));
-            restaurantsDAO.save(restaurant.get());
+            restaurant = Optional.of(restaurantsDAO.save(restaurant.get()));
 
             logger.info("Comentario creado correctamente.");
             return new ResponseEntity<>(new RestaurantModel(restaurant.get()), HttpStatus.OK);
 
         } catch (Exception e) {
             logger.error("Se produjo un error guardando el comentario: ", e);
+            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/nueva-reserva", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity<?> nuevaReserva(@RequestBody NuevaReserva reserva) {
+        try {
+            logger.info("Creando reserva [{}]...", reserva);
+            RestaurantsDAO restaurantsDAO = repository.getDAO(RestaurantsDAO.class);
+            Optional<Restaurant> restaurant = restaurantsDAO.findByName(reserva.restaurante());
+
+            if (restaurant.isEmpty())
+                return new ResponseEntity<>(new Error(String.format(
+                        "No se encontró el restaurante con nombre %s", reserva.restaurante())), HttpStatus.BAD_REQUEST);
+
+            restaurant.get().getReservations().add(new Reservation(reserva.usuario(), reserva.getFechaFormateada()));
+            restaurant = Optional.of(restaurantsDAO.save(restaurant.get()));
+
+            logger.info("Reserva creada correctamente.");
+            return new ResponseEntity<>(new RestaurantModel(restaurant.get()), HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Se produjo un error guardando la reserva: ", e);
             return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
