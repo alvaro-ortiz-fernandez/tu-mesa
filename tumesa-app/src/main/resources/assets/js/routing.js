@@ -44,17 +44,6 @@ const router = VueRouter.createRouter({
                 ]
             }
         } },
-        { path: '/administrador', component: adminProfileComponent, meta: {
-            private: true,
-            breadcrumb: {
-                show: true,
-                title: 'Perfil de usuario',
-                paths: [
-                    { title: 'Inicio', path: '/', active: false },
-                    { title: 'Perfil de usuario', active: true }
-                ]
-            }
-        } },
         { path: '/restaurantes', component: listComponent, meta: {
             private: false,
             breadcrumb: {
@@ -75,19 +64,6 @@ const router = VueRouter.createRouter({
                     { title: 'Inicio', path: '/', active: false },
                     { title: 'Listado de restaurantes', path: '/restaurantes', active: false },
                     { title: 'Restaurante', active: true }
-                ]
-            }
-        } },
-        { path: '/nueva-reserva', component: reservationComponent, meta: {
-            private: true,
-            breadcrumb: {
-                show: true,
-                title: 'Crear reserva',
-                paths: [
-                    { title: 'Inicio', path: '/', active: false },
-                    { title: 'Listado de restaurantes', path: '/restaurantes', active: false },
-                    { title: 'Restaurante', path: '/restaurante', active: false },
-                    { title: 'Crear reserva', active: true }
                 ]
             }
         } }
