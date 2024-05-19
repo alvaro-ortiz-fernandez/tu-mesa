@@ -218,20 +218,20 @@
                         </div>
                     </div>
 
-                    <!-- Opiniones -->
+                    <!-- Reseñas -->
                     <div class="col-md-5 col-xs-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="mb-4">Opiniones</h4>
+                                <h4 class="mb-4">Reseñas</h4>
 
-                                <!-- Comentarios -->
+                                <!-- Reseñas -->
                                 <div v-for="(comment, index) in restaurant.comments" :key="comment.date">
                                     <div class="d-flex align-items-center mb-3">
                                         <!-- Avatar -->
                                         <div class="flex-shrink-0">
                                             <img class="img-50 img-fluid m-r-20 rounded-circle" src="/images/user/user.png" alt="User">
                                         </div>
-                                        <!-- Nombre del usuario y fecha del comentario -->
+                                        <!-- Nombre del usuario y fecha de la reseña -->
                                         <div class="flex-shrink-0">
                                             <p class="mb-0"><strong>{{ comment.user }}</strong></p>
                                             <small class="text-secondary">{{ $filters.timestampToDate(comment.date) }}</small>
@@ -248,10 +248,10 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <!-- Nuevo comentario -->
+                                <!-- Nueva reseña -->
                                 <form v-if="$root.user" id="form-comentario" class="form-wizard" action="#">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" placeholder="Introduzca un comentario..." required="required" v-model="nuevoComentario.contenido">
+                                        <input class="form-control" type="text" placeholder="Introduzca una reseña..." required="required" v-model="nuevoComentario.contenido">
                                         <div class="rating input-group-text">
                                             <i class="fa fa-star" :class="{ 'selected': nuevoComentario.selectedRating >= 1 || nuevoComentario.hoverRating >= 1 }"
                                                @click="nuevoComentario.selectedRating = 1" @mouseover="nuevoComentario.hoverRating = 1" @mouseleave="nuevoComentario.hoverRating = 0"></i>
