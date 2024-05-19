@@ -6,6 +6,7 @@ import com.uoc.tumesa.repo.model.User;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.time.ZoneId;
 import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.*;
@@ -36,7 +37,8 @@ public class UsersDAO extends AppDAO<User> {
                 document.getObjectId("_id").toString(),
                 document.getString("name"),
                 document.getString("password"),
-                document.getString("email"));
+                document.getString("email"),
+                document.getDate("signupDate").toInstant().atZone(ZoneId.systemDefault()));
     }
 
     @Override
@@ -44,7 +46,8 @@ public class UsersDAO extends AppDAO<User> {
         Document document =
             new Document("name", user.getName())
                 .append("password", user.getPassword())
-                .append("email", user.getEmail());
+                .append("email", user.getEmail())
+                .append("signupDate", user.getSignupDate().toInstant());
 
         if (!Strings.isNullOrEmpty(user.getId()))
             document.append("_id", new ObjectId(user.getId()));

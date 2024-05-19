@@ -3,6 +3,7 @@ package com.uoc.tumesa.app.spring.sec.user;
 import com.google.common.collect.Lists;
 import com.uoc.tumesa.app.model.LoginResult;
 import com.uoc.tumesa.app.model.SignupResult;
+import com.uoc.tumesa.app.model.UserModel;
 import com.uoc.tumesa.app.spring.sec.jwt.JwtService;
 import com.uoc.tumesa.repo.Repository;
 import com.uoc.tumesa.repo.dao.UsersDAO;
@@ -57,7 +58,7 @@ public class UsuarioDetailsService implements UserDetailsService {
         if (!user.get().getPassword().equals(password))
             return new LoginResult(LoginResult.Result.InvalidPassword, null);
 
-        return new LoginResult(LoginResult.Result.Ok, toUsuario(user.get()));
+        return new LoginResult(LoginResult.Result.Ok, toUserModel(user.get()));
     }
 
     /**
@@ -70,7 +71,7 @@ public class UsuarioDetailsService implements UserDetailsService {
             return new SignupResult(SignupResult.Result.AlreadyRegisteredUser, null);
 
         User newUser = createUser(username, password, email);
-        return new SignupResult(SignupResult.Result.Ok, toUsuario(newUser));
+        return new SignupResult(SignupResult.Result.Ok, toUserModel(newUser));
     }
 
     /**
@@ -89,6 +90,13 @@ public class UsuarioDetailsService implements UserDetailsService {
         return repository
                 .getDAO(UsersDAO.class)
                 .findByName(username);
+    }
+
+    /**
+     * Método que convierte un usuario del repositorio en un usuario para enviar al frontend.
+     * */
+    private UserModel toUserModel(User user) {
+        return new UserModel(user, jwtService.generateToken(user.getName()));
     }
 
     /**

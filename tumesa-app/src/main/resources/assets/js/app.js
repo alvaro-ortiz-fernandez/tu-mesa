@@ -6,7 +6,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 let app = {
     data() {
         return {
-            user: localStorage.getItem("tumesa-user")
+            user: localStorage.getItem("tumesa-user"),
+            userMail: localStorage.getItem("tumesa-userMail"),
+            userDate: localStorage.getItem("tumesa-userDate"),
+            userAuthorization: localStorage.getItem("tumesa-authorization")
         }
     },
     created() {
@@ -22,18 +25,24 @@ let app = {
         })
     },
     methods: {
-        addAuthorization(user, authorization) {
-            this.user = user;
-            axios.defaults.headers.common['Authorization'] = authorization;
+        addAuthorization(user) {
+            this.user = user.name;
+            this.userMail = user.email;
+            this.userDate = user.signupDate;
+            axios.defaults.headers.common['Authorization'] = user.jwtToken;
 
-            localStorage.setItem("tumesa-user", user);
-            localStorage.setItem("tumesa-authorization", authorization);
+            localStorage.setItem("tumesa-user", user.name);
+            localStorage.setItem("tumesa-userMail", user.email);
+            localStorage.setItem("tumesa-userDate", user.signupDate);
+            localStorage.setItem("tumesa-authorization", user.jwtToken);
         },
         removeAuthorization() {
             this.user = undefined;
             axios.defaults.headers.common['Authorization'] = '';
 
             localStorage.removeItem("tumesa-user");
+            localStorage.removeItem("tumesa-userMail");
+            localStorage.removeItem("tumesa-userDate");
             localStorage.removeItem("tumesa-authorization");
         }
     }

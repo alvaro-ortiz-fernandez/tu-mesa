@@ -2,6 +2,7 @@ package com.uoc.tumesa.repo.dao;
 
 import com.google.common.base.Strings;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.uoc.tumesa.repo.model.Restaurant;
 import com.uoc.tumesa.repo.model.Restaurant.Comment;
 import com.uoc.tumesa.repo.model.Restaurant.Images;
@@ -12,6 +13,7 @@ import org.bson.types.ObjectId;
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +40,23 @@ public class RestaurantsDAO extends AppDAO<Restaurant> {
                         regex("name", term),
                         regex("description", term)
                     ));
+    }
+
+    public List<Restaurant> findByUserWithReservation(@Nullable String user) {
+        return findByFilter(
+                Filters.elemMatch("reservations", Filters.eq("user", user)));
+    }
+
+    public Long countByUserWithComment(String user) {
+
+        Document result = collection.aggregate(Arrays.asList(
+                new Document("$match", new Document("comments.user", user)),
+                new Document("$unwind", "$comments"),
+                new Document("$match", new Document("comments.user", user)),
+                new Document("$group", new Document("_id", null).append("totalComments", new Document("$sum", 1)))
+            )).first();
+
+        return result != null ? result.getInteger("totalComments") : 0L;
     }
 
     @Override

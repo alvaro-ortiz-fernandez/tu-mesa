@@ -23,7 +23,7 @@
             },
             created() {
                 if (this.$route.params?.name)
-                    this.restaurant = this.buscar(this.$route.params.name);
+                    this.restaurant = this.cargarRestaurante(this.$route.params.name);
                 else
                     NotificationService.showWarningToast();
             },
@@ -37,7 +37,7 @@
                 }
             },
             methods: {
-                buscar(nombre) {
+                cargarRestaurante(nombre) {
                     this.loading = true;
 
                     setTimeout(() => {
@@ -51,7 +51,7 @@
                             this.loading = false;
                         })
                         .catch((error) => {
-                            console.error("Se produjo un error al buscar el restaurante: ", error);
+                            console.error("Se produjo un error al cargar el restaurante: ", error);
                             NotificationService.showWarningToast();
                             this.loading = false;
                         });
@@ -104,6 +104,28 @@
                             });
                         }, 500);
                     }
+                },
+                eliminarReserva(date) {
+                    NotificationService.showLoading("Eliminando reserva");
+
+                    setTimeout(() => {
+                        axios.post('/restaurantes/eliminar-reserva', {
+                            restaurante: this.restaurant.name,
+                            usuario: this.$root.user,
+                            fecha: date
+                        })
+                        .then((response) => {
+                            NotificationService.hideLoading();
+                            this.restaurant = response.data;
+                            this.initDatepicker(response.data);
+                            NotificationService.showSuccessToast("Reserva eliminada correctamente");
+                        })
+                        .catch((error) => {
+                            console.error("Se produjo un error al eliminar la reserva: ", error);
+                            NotificationService.hideLoading();
+                            NotificationService.showWarningToast();
+                        });
+                    }, 500);
                 },
                 initCarousel() {
                     setTimeout(() => {
@@ -264,6 +286,9 @@
                                                     <i class="fa fa-calendar ps-4 pe-4"></i>
                                                 </div>
                                                 <input class="form-control disabled" type="text" disabled="disabled" :value="$filters.timestampToDateTime(reserva.date)">
+                                                <button class="btn btn-danger" type="button" @click.prevent="eliminarReserva($filters.timestampToDateTime(reserva.date))">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
                                             </div>
                                         </div>
                                         <!-- Aviso de login para gestionar las reservas -->

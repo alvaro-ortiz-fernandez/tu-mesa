@@ -3,14 +3,51 @@
 <th:template th:fragment="user-profile">
     <script type="application/javascript">
         let userProfileComponent = Vue.defineComponent({
-            template: '#user-profile-template'
+            template: '#user-profile-template',
+            data() {
+                return {
+                    profile: {},
+                    loading: true
+                }
+            },
+            created() {
+                this.profile = this.cargarPerfil(this.$root.user);
+            },
+            methods: {
+                cargarPerfil(user) {
+                    this.loading = true;
+
+                    axios.post('/auth/perfil', {
+                        user: user
+                    })
+                    .then((response) => {
+                        this.profile = response.data;
+                        this.loading = false;
+                    })
+                    .catch((error) => {
+                        console.error("Se produjo un error al obtener el perfil de usuario: ", error);
+                        NotificationService.showWarningToast();
+                        this.loading = false;
+                    });
+                }
+            }
         });
     </script>
 
     <script type="text/x-template" id="user-profile-template">
-        <div class="page-container user-profile">
-            <div class="row">
-                <div class="col-md-6">
+        <section class="page-container user-profile">
+            <div class="row" v-if="loading">
+                <!-- Aviso de carga -->
+                <div class="col-xs-12">
+                    <div class="d-flex justify-content-center">
+                        <div class="app-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="!loading && profile?.numComents !== undefined" class="row">
+                <div class="col-lg-6">
+                    <!-- Perfil de usuario -->
                     <div class="card hovercard text-center">
                         <div class="cardheader" style="background: url(/images/user/bg.jpg); background-size: cover; background-position: 10%;"></div>
                         <div class="user-image">
@@ -31,24 +68,25 @@
                                         <i class="fa fa-envelope"></i>
                                            Email
                                     </h6>
-                                    <span>Marekjecno@yahoo.com</span>
+                                    <span>{{ $root.userMail }}</span>
                                 </div>
                                 <div class="col-6">
                                     <h6 class="mb-1">
                                         <i class="fa fa-calendar"></i>
                                            Fecha de registro
                                     </h6>
-                                    <span>02 January 1988</span>
+                                    <span>{{ $filters.timestampToDateStr($root.userDate) }}</span>
                                 </div>
                             </div>
                             <hr>
+                            <!-- Estadísticas -->
                             <div class="follow">
                                 <div class="row">
                                     <div class="col-4 offset-2 text-center border-right">
-                                        <div class="follow-num counter">25869</div><span>Reservas</span>
+                                        <div class="follow-num counter">{{ profile?.numComents }}</div><span>Reseñas</span>
                                     </div>
                                     <div class="col-4 text-tenter">
-                                        <div class="follow-num counter">659887</div><span>Algo pondré aquí</span>
+                                        <div class="follow-num counter">{{ profile?.reservations?.length }}</div><span>Reservas</span>
                                     </div>
                                 </div>
                             </div>
@@ -56,16 +94,42 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-lg-6">
+                    <!-- Reservas -->
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Reservas</h4>
-                            <p>Prueba</p>
+                            <p v-if="!(profile?.reservations) || profile?.reservations?.length === 0">No posee ninguna reserva activa.</p>
+
+                            <div v-else v-for="(reserva, index) in profile?.reservations" :key="reserva.restaurant.name" class="blog-box blog-list row" :class="{ 'mb-2': index !== (profile?.reservations.length - 1) }">
+                                <div class="col-sm-3">
+                                    <img class="img-fluid sm-100-w px-0 cursor-pointer" :src="'/images/restaurant/' + reserva.restaurant.images.main + '.jpg'" alt=""
+                                         @click.prevent="$router.push({ path: '/restaurante/' + reserva.restaurant.name })">
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="blog-details">
+                                        <h6>
+                                            <a @click.prevent="$router.push({ path: '/restaurante/' + reserva.restaurant.name })">
+                                                {{ reserva.restaurant.name }}
+                                            </a>
+                                        </h6>
+                                        <div class="blog-bottom-content">
+                                            <hr>
+                                            <div v-for="(date, index) in reserva.dates" :key="date" class="input-group" :class="{ 'mb-2': index !== (reserva.dates.length - 1) }">
+                                                <div class="input-group-text">
+                                                    <i class="fa fa-calendar ps-4 pe-4"></i>
+                                                </div>
+                                                <input class="form-control disabled" type="text" disabled="disabled" :value="$filters.timestampToDateTime(date)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </script>
 </th:template>
 </html>

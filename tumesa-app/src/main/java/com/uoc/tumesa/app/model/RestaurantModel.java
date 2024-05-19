@@ -1,5 +1,6 @@
 package com.uoc.tumesa.app.model;
 
+import com.uoc.tumesa.repo.model.Restaurant;
 import com.uoc.tumesa.repo.model.Restaurant.Comment;
 import com.uoc.tumesa.repo.model.Restaurant.Images;
 import com.uoc.tumesa.repo.model.Restaurant.Reservation;
@@ -13,7 +14,7 @@ import java.util.List;
 public record RestaurantModel(String name, String description, String address, BigDecimal rating,
         Images images, List<Comment> comments, List<Reservation> reservations) {
 
-    public RestaurantModel(com.uoc.tumesa.repo.model.Restaurant restaurant) {
+    public RestaurantModel(Restaurant restaurant) {
         this(restaurant.getName(), restaurant.getDescription(), restaurant.getAddress(), restaurant.getRating(),
                 restaurant.getImages(), restaurant.getComments(), restaurant.getReservations());
     }
