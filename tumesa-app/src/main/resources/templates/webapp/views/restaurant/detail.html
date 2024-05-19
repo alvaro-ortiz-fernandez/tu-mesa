@@ -93,6 +93,7 @@
                             })
                             .then((response) => {
                                 NotificationService.hideLoading();
+                                this.nuevaReserva = undefined;
                                 this.restaurant = response.data;
                                 this.initDatepicker(response.data);
                                 NotificationService.showSuccessToast("Reserva creada correctamente");
