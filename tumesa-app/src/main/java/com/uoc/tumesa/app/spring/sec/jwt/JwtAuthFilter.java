@@ -23,11 +23,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
+    // URLs que no requieren de autenticación JWT
     private final AntPathRequestMatcher[] requestMatchers = {
             new AntPathRequestMatcher("/"),
-            new AntPathRequestMatcher("/auth/**"),
+            new AntPathRequestMatcher("/auth/login"),
+            new AntPathRequestMatcher("/auth/registro"),
             new AntPathRequestMatcher("/restaurantes"),
             new AntPathRequestMatcher("/restaurantes/restaurante"),
+            new AntPathRequestMatcher("/api/**"),
             new AntPathRequestMatcher("/css/**"),
             new AntPathRequestMatcher("/js/**"),
             new AntPathRequestMatcher("/images/**"),
