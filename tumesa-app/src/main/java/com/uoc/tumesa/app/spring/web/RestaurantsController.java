@@ -3,24 +3,11 @@ package com.uoc.tumesa.app.spring.web;
 import com.uoc.tumesa.app.model.FiltroBusquedaRestaurantes;
 import com.uoc.tumesa.app.model.Reserva;
 import com.uoc.tumesa.app.model.NuevoComentario;
-import com.uoc.tumesa.app.model.RestaurantModel;
-import com.uoc.tumesa.repo.Repository;
-import com.uoc.tumesa.repo.dao.RestaurantsDAO;
-import com.uoc.tumesa.repo.model.Restaurant;
-import com.uoc.tumesa.repo.model.Restaurant.Comment;
-import com.uoc.tumesa.repo.model.Restaurant.Reservation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.uoc.tumesa.app.service.RestaurantsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Controlador con los endpoints relativos a consulta, visualización y edición de restaurantes.
@@ -29,126 +16,47 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/restaurantes", method = { RequestMethod.POST })
 public class RestaurantsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RestaurantsController.class);
-
     @Autowired
-    private Repository repository;
+    private RestaurantsService restaurantsService;
 
 
+    /**
+     * Endpoint para obtener los restaurantes con el filtro indicado.
+     * */
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<?> listado(@RequestBody FiltroBusquedaRestaurantes filtro) {
-        try {
-            logger.info("Obteniendo restaurantes con filtro [{}]...", filtro);
-            List<RestaurantModel> restaurants = repository.getDAO(RestaurantsDAO.class)
-                    .findByTerm(filtro.termino()).stream()
-                    .filter(res -> filtro.puntuacion() == null || res.getRating().compareTo(filtro.puntuacion()) >= 0)
-                    .map(RestaurantModel::new)
-                    .collect(Collectors.toList());
-
-            logger.info("Nº de restaurantes obtenidos: {}", restaurants.size());
-            return new ResponseEntity<>(restaurants, HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Se produjo un error al obtener los restaurantes: ", e);
-            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return restaurantsService.buscarRestaurantes(filtro);
     }
 
+    /**
+     * Endpoint para obtener el restaurante con el nombre indicado.
+     * */
     @PostMapping(value = "/restaurante", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<?> restaurante(@RequestBody FiltroBusquedaRestaurantes filtro) {
-        try {
-            logger.info("Obteniendo restaurante con nombre [{}]...", filtro.nombre());
-            Optional<RestaurantModel> restaurant = repository.getDAO(RestaurantsDAO.class)
-                    .findByName(filtro.nombre())
-                    .map(RestaurantModel::new);
-
-            logger.info("Restaurante encontrado -> {}", restaurant.isPresent());
-
-            if (restaurant.isEmpty())
-                return new ResponseEntity<>(new Error(String.format(
-                        "No se encontró el restaurante con nombre %s", filtro.nombre())), HttpStatus.BAD_REQUEST);
-            else
-                return new ResponseEntity<>(restaurant.get(), HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Se produjo un error al obtene el restaurante: ", e);
-            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return restaurantsService.obtenerRestaurante(filtro.nombre());
     }
 
+    /**
+     * Endpoint para crear el comentario indicado.
+     * */
     @PostMapping(value = "/nuevo-comentario", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<?> nuevoComentario(@RequestBody NuevoComentario comentario) {
-        try {
-            logger.info("Creando comentario [{}]...", comentario);
-            RestaurantsDAO restaurantsDAO = repository.getDAO(RestaurantsDAO.class);
-            Optional<Restaurant> restaurant = restaurantsDAO.findByName(comentario.restaurante());
-
-            if (restaurant.isEmpty())
-                return new ResponseEntity<>(new Error(String.format(
-                        "No se encontró el restaurante con nombre %s", comentario.restaurante())), HttpStatus.BAD_REQUEST);
-
-            restaurant.get().getComments().add(new Comment(comentario.usuario(), comentario.comentario(),
-                    comentario.puntuacion(), ZonedDateTime.now()));
-            restaurant = Optional.of(restaurantsDAO.save(restaurant.get()));
-
-            logger.info("Comentario creado correctamente.");
-            return new ResponseEntity<>(new RestaurantModel(restaurant.get()), HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Se produjo un error guardando el comentario: ", e);
-            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return restaurantsService.crearComentario(comentario.restaurante(), comentario.usuario(), comentario.comentario(), comentario.puntuacion());
     }
 
+    /**
+     * Endpoint para crear la reserva indicada.
+     * */
     @PostMapping(value = "/nueva-reserva", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<?> nuevaReserva(@RequestBody Reserva reserva) {
-        try {
-            logger.info("Creando reserva [{}]...", reserva);
-            RestaurantsDAO restaurantsDAO = repository.getDAO(RestaurantsDAO.class);
-            Optional<Restaurant> restaurant = restaurantsDAO.findByName(reserva.restaurante());
-
-            if (restaurant.isEmpty())
-                return new ResponseEntity<>(new Error(String.format(
-                        "No se encontró el restaurante con nombre %s", reserva.restaurante())), HttpStatus.BAD_REQUEST);
-
-            restaurant.get().getReservations().add(new Reservation(reserva.usuario(), reserva.getFechaFormateada()));
-            restaurant = Optional.of(restaurantsDAO.save(restaurant.get()));
-
-            logger.info("Reserva [{}] creada correctamente.", reserva);
-            return new ResponseEntity<>(new RestaurantModel(restaurant.get()), HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Se produjo un error guardando la reserva: ", e);
-            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return restaurantsService.crearReserva(reserva);
     }
 
+    /**
+     * Endpoint para eliminar la reserva indicada.
+     * */
     @PostMapping(value = "/eliminar-reserva", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<?> eliminarReserva(@RequestBody Reserva reserva) {
-        try {
-            logger.info("Eliminando reserva [{}]...", reserva);
-            RestaurantsDAO restaurantsDAO = repository.getDAO(RestaurantsDAO.class);
-            Optional<Restaurant> restaurant = restaurantsDAO.findByName(reserva.restaurante());
-
-            if (restaurant.isEmpty())
-                return new ResponseEntity<>(new Error(String.format(
-                        "No se encontró el restaurante con nombre %s", reserva.restaurante())), HttpStatus.BAD_REQUEST);
-
-            boolean eliminada = restaurant.get().getReservations().removeIf(reservation ->
-                    reservation.getUser().equals(reserva.usuario()) && reserva.esIgual(reservation.getDate()));
-
-            if (!eliminada)
-                return new ResponseEntity<>(new Error(String.format("No se encontró la reserva con fecha %s " +
-                        "para el usuario %s", reserva.fecha(), reserva.usuario())), HttpStatus.BAD_REQUEST);
-
-            restaurant = Optional.of(restaurantsDAO.save(restaurant.get()));
-
-            logger.info("Reserva [{}] eliminada correctamente.", reserva);
-            return new ResponseEntity<>(new RestaurantModel(restaurant.get()), HttpStatus.OK);
-
-        } catch (Exception e) {
-            logger.error("Se produjo un error guardando la reserva: ", e);
-            return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return restaurantsService.eliminarReserva(reserva);
     }
 }
