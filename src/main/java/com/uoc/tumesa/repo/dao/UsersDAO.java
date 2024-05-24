@@ -2,9 +2,9 @@ package com.uoc.tumesa.repo.dao;
 
 import com.google.common.base.Strings;
 import com.mongodb.client.MongoDatabase;
-import com.uoc.tumesa.repo.model.User;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import com.uoc.tumesa.repo.model.User;
 
 import java.time.ZoneId;
 import java.util.Optional;

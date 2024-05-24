@@ -1,6 +1,1 @@
-
 rootProject.name = 'tu-mesa'
-
-include ':tumesa-lib'
-include ':tumesa-repository'
-include ':tumesa-app'

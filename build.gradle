@@ -5,11 +5,19 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.4'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 def javaVersion = 1.21
+def jwtVersion = '0.11.5'
+def slf4jVersion = '2.0.13'
 
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
@@ -19,41 +27,38 @@ repositories {
 	mavenCentral()
 }
 
-subprojects {
-	apply plugin: 'idea'
-	apply plugin: 'java'
-	apply plugin: 'maven-publish'
+dependencies {
+	// Framework web
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-devtools'
 
-	repositories {
-		mavenLocal()
-		mavenCentral()
-	}
+	// Servlet
+	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
-	sourceCompatibility = javaVersion
-	targetCompatibility = javaVersion
+	// Autenticaciòn por JWT
+	implementation 'io.jsonwebtoken:jjwt-api:' + jwtVersion
+	implementation 'io.jsonwebtoken:jjwt-impl:' + jwtVersion
+	implementation 'io.jsonwebtoken:jjwt-jackson:' + jwtVersion
 
-	ext {
-		javaVersion = javaVersion
-		jwtVersion = '0.11.5'
-		slf4jVersion = '2.0.13'
-	}
+	// Funcionalidades útiles
+	implementation 'com.google.guava:guava:33.1.0-jre'
 
-	dependencies {
-		// Funcionalidades útiles
-		implementation 'com.google.guava:guava:33.1.0-jre'
+	// Logging
+	implementation 'org.slf4j:slf4j-api:' + slf4jVersion
 
-		// Logging
-		implementation 'org.slf4j:slf4j-api:' + slf4jVersion
+	// Clases para conectar a la BBDD MongoDB
+	implementation 'org.mongodb:mongodb-driver-sync:4.11.1'
 
-		// Test unitarios
-		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
-	}
-
-	tasks.withType(JavaCompile) {
-		options.encoding = 'UTF-8'
-	}
-
-	compileJava.options.encoding = 'UTF-8'
-	group 'com.uoc.tumesa'
-	version '1.0.0'
+	// Test unitarios
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
 }
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+compileJava.options.encoding = 'UTF-8'
+group 'com.uoc.tumesa'
+version '1.0.0'

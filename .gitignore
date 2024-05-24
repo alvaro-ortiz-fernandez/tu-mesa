@@ -9,4 +9,5 @@
 /project/
 /workspace.xml
 
-/tumesa-app/src/main/resources/config.properties
+/src/main/resources/config.properties
+/src/main/resources/templates/webapp/.vscode
