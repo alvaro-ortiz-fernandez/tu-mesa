@@ -53,11 +53,13 @@ public class PropertiesConfig {
         try {
             List<URL> urls = Lists.newArrayList();
             this.getClass().getClassLoader().getResources(FILE).asIterator().forEachRemaining(urls::add);
+            this.getClass().getClassLoader().getResources(String.format("/%s", FILE)).asIterator().forEachRemaining(urls::add);
             this.getClass().getClassLoader().resources(FILE).forEach(urls::add);
+            this.getClass().getClassLoader().resources(String.format("/%s", FILE)).forEach(urls::add);
 
             return urls;
         } catch (IOException e) {
-            return Lists.newArrayList();
+            throw new RuntimeException(e);
         }
     }
 }
