@@ -18,8 +18,8 @@ public class PropertiesConfig {
     public ConfigManager configManager() throws IOException {
 
         Properties properties = new Properties();
-        properties.setProperty(Repository.REPOSITORY_URL, System.getProperty("DB_URL"));
-        properties.setProperty(Repository.REPOSITORY_DB, System.getProperty("DB_NAME"));
+        properties.setProperty(Repository.REPOSITORY_URL, System.getProperty("dburl"));
+        properties.setProperty(Repository.REPOSITORY_DB, System.getProperty("dbname"));
 
         return new ConfigManager(properties);
     }
