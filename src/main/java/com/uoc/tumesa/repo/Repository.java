@@ -13,15 +13,18 @@ import com.uoc.tumesa.repo.dao.UsersDAO;
  * */
 public class Repository {
 
+    public static String REPOSITORY_URL = "repository.connection";
+    public static String REPOSITORY_DB  = "repository.db";
+
     private static MongoClient client;
     private final MongoDatabase db;
 
     public Repository(ConfigManager config) {
         // Creamos la conexión MongoDB
-        client = MongoClients.create(config.getProperty("repository.connection"));
+        client = MongoClients.create(config.getProperty(REPOSITORY_URL));
 
         // Y obtenemos la base de datos
-        this.db = client.getDatabase(config.getProperty("repository.db"));
+        this.db = client.getDatabase(config.getProperty(REPOSITORY_DB));
     }
 
     @SuppressWarnings("unchecked")

@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/tu-mesa-1.0.0.jar
+web: java -Ddburl=$DB_URL -Ddbname=$DB_NAME -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/tu-mesa-1.0.0.jar
