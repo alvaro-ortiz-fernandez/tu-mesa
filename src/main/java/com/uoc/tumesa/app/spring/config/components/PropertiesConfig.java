@@ -1,11 +1,13 @@
 package com.uoc.tumesa.app.spring.config.components;
 
+import com.google.common.collect.Lists;
 import com.uoc.tumesa.properties.ConfigManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,13 +16,16 @@ import java.util.Optional;
 @Configuration
 public class PropertiesConfig {
 
+    public static final String FILE = "config.properties";
+
     @Bean(name = "configManager")
     public ConfigManager configManager() throws IOException {
 
         URL configUrl = getConfigFromClasspath()
                 .orElseGet(() -> getConfigFromClassloader()
-                .orElseThrow(() -> new IllegalStateException(
-                        "No se encontró el archivo config.properties en el classpath ni en el classloader")));
+                .orElseThrow(() -> new IllegalStateException(String.format(
+                        "No se encontró el archivo %s en el classpath ni en el classloader " +
+                                "(URLs en el classloader: %s)", FILE, getConfigPathsFromClassloader()))));
 
         return new ConfigManager(configUrl);
     }
@@ -30,7 +35,7 @@ public class PropertiesConfig {
      * Es la forma en que podemos cargar este fichero cuando ejecutamos la aplicación en un IDE en local.
      * */
     protected Optional<URL> getConfigFromClasspath() {
-        return Optional.ofNullable(this.getClass().getResource("/config.properties"));
+        return Optional.ofNullable(this.getClass().getResource(String.format("/%s", FILE)));
     }
 
     /**
@@ -38,6 +43,21 @@ public class PropertiesConfig {
      * Es la forma en que podemos cargar este fichero cuando desplegamos la aplicación en un servidor.
      * */
     protected Optional<URL> getConfigFromClassloader() {
-        return Optional.ofNullable(this.getClass().getClassLoader().getResource("config.properties"));
+        return Optional.ofNullable(this.getClass().getClassLoader().getResource(FILE));
+    }
+
+    /**
+     * Método que obtiene la lista de URLs del fichero 'config.properties' en el classloader.
+     * */
+    protected List<URL> getConfigPathsFromClassloader() {
+        try {
+            List<URL> urls = Lists.newArrayList();
+            this.getClass().getClassLoader().getResources(FILE).asIterator().forEachRemaining(urls::add);
+            this.getClass().getClassLoader().resources(FILE).forEach(urls::add);
+
+            return urls;
+        } catch (IOException e) {
+            return Lists.newArrayList();
+        }
     }
 }
